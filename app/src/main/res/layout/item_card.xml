@@ -3,48 +3,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:orientation="horizontal">
 
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimension_200"
+        android:id="@+id/iv_item_image"
+        android:src="@drawable/bonita"
+        android:layout_margin="0dp"
+        />
 
     <TextView
-        android:id="@+id/tvFullName"
+        android:id="@+id/tv_brand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Maria de Carvalho"
-        android:textColor="@color/darkBlue"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="30dp"
-
-        />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-
-        app:civ_border_width="5dp"
-        android:id="@+id/ciImage"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/user_general_image"
-        app:civ_border_color="@color/darkYellow"
-        />
-    <TextView
-        android:id="@+id/tvNumberOfMessages"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:text="10"
-        android:background="@drawable/round_yellow_background_yellow"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
+        android:text="Romanos"
         android:textAlignment="center"
         android:paddingTop="4dp"
+        android:layout_below="@+id/iv_item_image"
+        android:layout_centerHorizontal="true"
         />
-
-
-
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ferdinand"
+        android:textAlignment="center"
+        android:paddingTop="4dp"
+        android:layout_below="@+id/tv_brand"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10,450kz"
+        android:textAlignment="center"
+        android:paddingTop="4dp"
+        android:layout_below="@+id/tv_title"
+        android:layout_centerHorizontal="true"
+        />
 
 </RelativeLayout>

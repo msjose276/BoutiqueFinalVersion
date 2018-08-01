@@ -24,8 +24,34 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:support-v4:26.1.0'
+
+    implementation 'com.google.firebase:firebase-storage:15.0.0'
+    implementation 'com.google.firebase:firebase-auth:15.0.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'de.hdodenhof:circleimageview:2.2.0'
+
+    compile 'com.google.firebase:firebase-core:15.0.0'
+    compile 'com.google.firebase:firebase-database:15.0.0'
+
+    compile 'com.google.firebase:firebase-storage:16.0.1'
+    compile 'com.google.firebase:firebase-auth:16.0.2'
+    compile 'com.firebaseui:firebase-ui:3.3.1'
+    //compile 'com.google.firebase:firebase-core:15.0.0'
+
+    implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
+    //implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
+    implementation'com.firebaseui:firebase-ui-storage:2.0.1'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
+    //implementation 'com.firebaseui:firebase-ui-storage:3.2.1'
+
+    // Required only if Facebook login support is required
+    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
+    //implementation 'com.facebook.android:facebook-android-sdk:4.x'
+
 }
+
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,4 +1,4 @@
-package com.example.mateusjose.newchatos.Menu_Activities;
+package com.example.mateusjose.newchatos.Nav_activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,12 +9,12 @@ import android.view.View;
 
 import com.example.mateusjose.newchatos.R;
 
-public class MenuRecentsActivity extends AppCompatActivity {
+public class NavAboutTheAppActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_recents);
+        setContentView(R.layout.activity_nav_about_the_app);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -26,6 +26,7 @@ public class MenuRecentsActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 }

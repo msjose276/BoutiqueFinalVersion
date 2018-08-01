@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimension_150"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/item_card_border">
+
+
+
+    <ImageView
+        android:padding="@dimen/dimension_20"
+        android:layout_width="@dimen/dimension_150"
+        android:layout_height="@dimen/dimension_150"
+        android:id="@+id/iv_item_image"
+        android:src="@drawable/bonita"
+        />
+
+    <TextView
+        android:paddingTop="@dimen/dimension_20"
+        android:layout_width="@dimen/dimension_100"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_price"
+        android:text="price: 100kz"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/iv_item_image"
+        />
+    <TextView
+        android:paddingTop="@dimen/dimension_5"
+        android:layout_width="@dimen/dimension_100"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_brand"
+        android:text="Titulo: Gucii"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/iv_item_image"
+        android:layout_below="@+id/et_price"
+        />
+
+    <TextView
+        android:paddingTop="@dimen/dimension_5"
+        android:layout_width="@dimen/dimension_200"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_boutique"
+        android:text="boutique: Tia Maria"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/iv_item_image"
+        android:layout_below="@+id/et_brand"
+        />
+
+    <TextView
+        android:paddingTop="@dimen/dimension_5"
+        android:layout_width="@dimen/dimension_200"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_location"
+        android:text="Localizacao: Maianga"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/iv_item_image"
+        android:layout_below="@+id/et_boutique"
+        />
+
+
+
+</RelativeLayout>

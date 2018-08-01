@@ -36,7 +36,7 @@ public class FragmentTabExplor extends android.support.v4.app.Fragment{
         listOfContacts.add(new Contact("amantes do fotebol","sibo","234234545542"));
         listOfContacts.add(new Contact("estudantes do ISPTEC","235354542"));
         //Mateus: call and set the card adaptor
-        ItemAdaptor adaptor = new ItemAdaptor(getContext(),listOfContacts,2);
+        ItemAdaptor adaptor = new ItemAdaptor(getContext(),listOfContacts);
 
 
         final ListView listView = (ListView) page.findViewById(R.id.lvItem);

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.PostItem"
+    android:background="@color/darkYellow"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/appbar"
+        android:id="@+id/tv_line"
+        android:background="@color/white"
+        />
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_line"
+        android:layout_marginBottom="@dimen/dimension_50"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="titutlo da calca"
+                android:layout_marginLeft="@dimen/dimension_20"
+                android:id="@+id/tv_title"
+                android:textColorHint="@color/white"
+                android:layout_marginTop="@dimen/dimension_10"
+                />
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimension_40"
+                android:layout_marginLeft="@dimen/dimension_20"
+                android:layout_marginRight="@dimen/dimension_20"
+                android:layout_below="@+id/tv_title"
+                android:background="@drawable/card_border"
+                android:hint="Gucci"
+                android:textColor="@color/white"
+                android:paddingLeft="@dimen/dimension_20"
+                />
+
+            <TextView
+                android:layout_below="@+id/et_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descricao da calca"
+                android:layout_marginLeft="@dimen/dimension_20"
+                android:id="@+id/tv_description"
+                android:textColorHint="@color/white"
+                android:layout_marginTop="@dimen/dimension_40"
+
+                />
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimension_150"
+                android:layout_marginLeft="@dimen/dimension_20"
+                android:layout_marginRight="@dimen/dimension_20"
+                android:layout_below="@+id/tv_description"
+                android:background="@drawable/card_border"
+                android:hint="escreva aqui"
+                android:textColor="@color/white"
+                android:paddingLeft="@dimen/dimension_20"
+                android:gravity="start"
+                android:isScrollContainer="true"
+                android:maxLines="7"
+                />
+
+            <TextView
+                android:layout_below="@+id/et_description"
+                android:layout_width="@dimen/dimension_100"
+                android:layout_height="wrap_content"
+                android:text="size"
+                android:layout_marginLeft="@dimen/dimension_30"
+                android:id="@+id/tv_size"
+                android:textColorHint="@color/white"
+                android:layout_marginTop="@dimen/dimension_20"
+                />
+            <Spinner
+                android:id="@+id/sp_size"
+                android:layout_width="@dimen/dimension_100"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_size"
+                android:layout_marginLeft="@dimen/dimension_10"
+                />
+
+            <TextView
+                android:layout_below="@+id/et_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Preco"
+                android:layout_marginLeft="@dimen/dimension_100"
+                android:id="@+id/tv_price"
+                android:textColorHint="@color/white"
+                android:layout_marginTop="@dimen/dimension_20"
+                android:layout_toRightOf="@+id/tv_size"
+
+                />
+            <EditText
+                android:id="@+id/et_price"
+                android:layout_width="@dimen/dimension_100"
+                android:layout_height="@dimen/dimension_40"
+                android:layout_marginLeft="@dimen/dimension_100"
+                android:layout_marginRight="@dimen/dimension_20"
+                android:layout_below="@+id/tv_price"
+                android:background="@drawable/card_border"
+                android:hint="kz"
+                android:textColor="@color/white"
+                android:paddingLeft="@dimen/dimension_20"
+                android:gravity="start"
+                android:layout_toRightOf="@+id/tv_size"
+
+                />
+
+
+            <TextView
+                android:layout_below="@+id/sp_size"
+                android:layout_width="@dimen/dimension_100"
+                android:layout_height="wrap_content"
+                android:text="Genero"
+                android:layout_marginLeft="@dimen/dimension_30"
+                android:id="@+id/tv_gender"
+                android:textColorHint="@color/white"
+                android:layout_marginTop="@dimen/dimension_20"
+                />
+            <Spinner
+                android:id="@+id/sp_gender"
+                android:layout_width="@dimen/dimension_100"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_gender"
+                android:layout_marginLeft="@dimen/dimension_10"
+                />
+
+
+            <TextView
+                android:layout_below="@+id/sp_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Numero de calcas"
+                android:layout_marginLeft="@dimen/dimension_100"
+                android:id="@+id/tv_stoke_size"
+                android:textColorHint="@color/white"
+                android:layout_marginTop="@dimen/dimension_20"
+                android:layout_toRightOf="@+id/tv_size"
+
+
+                />
+            <EditText
+                android:id="@+id/et_stoke_size"
+                android:layout_width="@dimen/dimension_100"
+                android:layout_height="@dimen/dimension_40"
+                android:layout_marginLeft="@dimen/dimension_100"
+                android:layout_marginRight="@dimen/dimension_20"
+                android:layout_below="@+id/tv_stoke_size"
+                android:background="@drawable/card_border"
+                android:hint="-"
+                android:textColor="@color/white"
+                android:paddingLeft="@dimen/dimension_20"
+                android:gravity="start"
+                android:layout_toRightOf="@+id/tv_size"
+
+                />
+
+
+
+
+
+
+            <TextView
+                android:layout_below="@+id/sp_gender"
+                android:layout_width="@dimen/dimension_100"
+                android:layout_height="@dimen/dimension_30"
+                android:text="UPLOAD"
+                android:layout_marginLeft="@dimen/dimension_30"
+                android:id="@+id/tv_upload_file"
+                android:textColorHint="@color/white"
+                android:layout_marginTop="@dimen/dimension_20"
+                android:background="@color/colorAccent"
+                android:onClick="uploadPhotos"
+                android:layout_marginBottom="@dimen/dimension_20"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                app:civ_border_width="0dp"
+                android:id="@+id/ci_profile_image"
+                android:layout_width="@dimen/dimension_80"
+                android:layout_height="@dimen/dimension_80"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/bonita"
+                android:layout_below="@+id/tv_upload_file"
+                android:onClick="getImage"
+
+                />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/RL_Lower"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        >
+        <TextView
+            android:id="@+id/tv_post"
+            android:layout_marginTop="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimension_50"
+            android:text="POSTAR"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:paddingTop="10dp"
+            android:onClick="postItem"
+            />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

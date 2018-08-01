@@ -6,4 +6,23 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
+
+
+    <dimen name="CardDetailActivity_smallLetter">13dp</dimen>
+    <dimen name="CardDetailActivity_medianLetter">15dp</dimen>
+    <dimen name="CardDetailActivity_largeLetter">18dp</dimen>
+    <dimen name="dimension_5">5dp</dimen>
+    <dimen name="dimension_10">10dp</dimen>
+    <dimen name="dimension_20">20dp</dimen>
+    <dimen name="dimension_30">30dp</dimen>
+    <dimen name="dimension_40">40dp</dimen>
+    <dimen name="dimension_50">50dp</dimen>
+    <dimen name="dimension_60">60dp</dimen>
+    <dimen name="dimension_70">70dp</dimen>
+    <dimen name="dimension_80">80dp</dimen>
+    <dimen name="dimension_100">100dp</dimen>
+    <dimen name="dimension_150">150dp</dimen>
+    <dimen name="dimension_200">200dp</dimen>
+    <dimen name="dimension_300">300dp</dimen>
+    <dimen name="dimension_400">400dp</dimen>
 </resources>

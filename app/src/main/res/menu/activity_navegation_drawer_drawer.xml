@@ -2,50 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view"
+
     >
 
     <group android:checkableBehavior="single"
         >
         <item
-            android:id="@+id/nav_newChat"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Nova Conversa"
+            android:id="@+id/nav_home"
+            android:title="Pagina inicial"
 
             />
         <item
-            android:id="@+id/nav_newGroupChat"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Novo Grupo" />
+            android:id="@+id/nav_favorites"
+            android:title="Favaritos" />
+        <item
+            android:id="@+id/nav_stores"
+            android:title="Lojas" />
+        <item
+            android:id="@+id/nav_payment_information"
+            android:title="Informacao de pagament"
+            />
+        <item
+            android:id="@+id/nav_definitions"
+            android:title="definicoes"
+
+            />
     </group>
 
-    <item android:title=" ">
-        <menu>
-            <item
-                android:id="@+id/nav_pendents"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Pendentes" />
-            <item
-                android:id="@+id/nav_recents"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Recentes" />
-            <item
-                android:id="@+id/nav_blocked"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Bloqueados" />
-        </menu>
-    </item>
-
-    <item android:title=" ">
-        <menu>
-            <item
-                android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="Definicoes" />
-            <item
-                android:id="@+id/nav_info"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Informacao" />
-        </menu>
-    </item>
 
 </menu>

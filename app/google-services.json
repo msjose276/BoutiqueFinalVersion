@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "216144806208",
+    "firebase_url": "https://boutiques-151ce.firebaseio.com",
+    "project_id": "boutiques-151ce",
+    "storage_bucket": "boutiques-151ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216144806208:android:4599ae80621f6967",
+        "android_client_info": {
+          "package_name": "com.example.mateusjose.newchatos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216144806208-bhs43803hn87qkpaajkil6hmc2qbkcuq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mateusjose.newchatos",
+            "certificate_hash": "5366a31dfb8dbf77d9d06fcbd9a8f74be151ce40"
+          }
+        },
+        {
+          "client_id": "216144806208-rqgt22shk20mnk6k2na0ltk431ss7ocl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDteIJUZ5ZdZeqfuD9lTLx1pFVxeCuN3Xo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216144806208-rqgt22shk20mnk6k2na0ltk431ss7ocl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

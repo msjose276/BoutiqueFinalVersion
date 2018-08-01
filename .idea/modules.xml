@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Boutique.iml" filepath="$PROJECT_DIR$/Boutique.iml" />
       <module fileurl="file://$PROJECT_DIR$/NewChatOS.iml" filepath="$PROJECT_DIR$/NewChatOS.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
