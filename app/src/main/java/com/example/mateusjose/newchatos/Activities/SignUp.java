@@ -107,8 +107,8 @@ public class SignUp extends AppCompatActivity {
                             FirebaseUser user = task.getResult().getUser();
                             boutiqueUser.setUserID(user.getUid());
                             boutiqueUser.saveBoutiqueUserOnFirebaseDatabase();
-                            /*Intent intent = new Intent(getBaseContext(), NavegationDrawerActivity.class);
-                            startActivity(intent);*/
+                            Intent intent = new Intent(getBaseContext(), NavegationDrawerActivity.class);
+                            startActivity(intent);
                             finish();
 
                         } else {

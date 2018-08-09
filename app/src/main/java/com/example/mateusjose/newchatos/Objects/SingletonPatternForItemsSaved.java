@@ -19,34 +19,33 @@ import java.util.List;
 
 public class SingletonPatternForItemsSaved {
 
-
-
     private static SingletonPatternForItemsSaved mInstance= null;
 
     private ItemBoutique itemBoutique = null;
-
     private List<ItemBoutique>  ListOfSavedItemBoutique = new ArrayList<ItemBoutique>();
 
     // path for the users in the firebase
     public static final String users = "Users";
     public static final String savedItems = "SavedItems";
+    public static final String personalInfo = "PersonalInfo";
 
+    DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+    DatabaseReference refForPersonalInfo = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(personalInfo);
+    DatabaseReference refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
 
     private SingletonPatternForItemsSaved(){
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-            DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-            DatabaseReference ref = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
-            //DatabaseReference ref = database.child("ItemBoutique");
 
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
             // initiate the arraylist
             ListOfSavedItemBoutique = new ArrayList<ItemBoutique>();
             // My top posts by number of stars
-            ref.addValueEventListener(new ValueEventListener() {
+            refForSavedItems.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                         // TODO: handle the post Comment movedComment = dataSnapshot.getValue(Comment.class);
                         ListOfSavedItemBoutique.add(postSnapshot.getValue(ItemBoutique.class));
+                        Log.e("item number","dddd");
                     }
                 }
 
@@ -78,24 +77,12 @@ public class SingletonPatternForItemsSaved {
     }
 
     public void uploadSavedItemBoutique(ItemBoutique itemBoutique) {
-
-        DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-        //set the path and save the values
-        DatabaseReference ref = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
-        ref.child(itemBoutique.getItemID()).setValue(itemBoutique);
-
+        refForSavedItems.child(itemBoutique.getItemID()).setValue(itemBoutique);
     }
 
-    public void updateAllSavedItemsBoutique() {
-        DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-        //set the path and save the list items
-        DatabaseReference ref = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
-        ref.setValue(ListOfSavedItemBoutique);
-    }
+    public void updateAllSavedItemsBoutique() { }
 
-    public void downloadSavedItemBoutique() {
-
-    }
+    public void downloadSavedItemBoutique() { }
 
     public void addSavedItemBoutique(ItemBoutique itemBoutique) {
 
@@ -105,8 +92,7 @@ public class SingletonPatternForItemsSaved {
         Log.e("addSavedItemBoutique","passou aqui");
         //check if the itemBoutique is not already in the list
         if(!ListOfSavedItemBoutique.contains(itemBoutique)){
-            //update the list and update the firebase
-            //ListOfSavedItemBoutique.add(itemBoutique);
+            //update the itemBoutique into firebase
             uploadSavedItemBoutique(itemBoutique);
             Log.e("addSavedItemBoutique","entrou");
         }
@@ -131,11 +117,7 @@ public class SingletonPatternForItemsSaved {
 
     public boolean deleteSavedItemBoutique(ItemBoutique itemBoutique) {
 
-        DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-        //set the path and save the values
-        DatabaseReference ref = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
-
-        ref.child(itemBoutique.getItemID()).removeValue().
+        refForSavedItems.child(itemBoutique.getItemID()).removeValue().
                 addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -148,10 +130,7 @@ public class SingletonPatternForItemsSaved {
                         //return false;
                     }
                 });
-
-        // there is no need to delete the itemBoutique from the list because onDataChange will already do it for us
-        //ListOfSavedItemBoutique.remove(itemBoutique);
-        //TODO: change the return value to wheever the actual return
+        //TODO: change the return value to whatever the actual return
         return true;
     }
 
@@ -160,6 +139,5 @@ public class SingletonPatternForItemsSaved {
         for (ItemBoutique temp : ListOfSavedItemBoutique) {
             Log.e("listItem: ",temp.getItemID());
         }
-
     }
 }

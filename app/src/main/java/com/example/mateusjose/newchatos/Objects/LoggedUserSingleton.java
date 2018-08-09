@@ -18,43 +18,31 @@ import com.google.firebase.storage.StorageReference;
 public class LoggedUserSingleton {
 
     private static LoggedUserSingleton mInstance= null;
-
     private BoutiqueUser boutiqueUser = null;
-    public int someValueIWantToKeep;
 
     // path for the users in the firebase
     public static final String users = "Users";
+    public static final String savedItems = "SavedItems";
+    public static final String personalInfo = "PersonalInfo";
 
+    DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+    DatabaseReference refForPersonalInfo = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(personalInfo);
+    DatabaseReference refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
 
     private LoggedUserSingleton(){
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-            DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-            DatabaseReference ref = database.child(users);
-            //int d;
-            Log.e("entour","LoggedUserSingleton");
 
             //get the user data from the database
-            ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            refForPersonalInfo.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     //save the data
-                    //d=0;
-                    Log.e("entour","LoggedUserSingleton222");
-                    //boutiqueUser = new BoutiqueUser();
-                    Log.e("entour","LoggedUserSingleton3333");
                     boutiqueUser = dataSnapshot.getValue(BoutiqueUser.class);
-
-                    /*boutiqueUser.setUserID(mboutiqueUser.getUserID());
-                    boutiqueUser.setEmail(mboutiqueUser.getEmail());
-                    boutiqueUser.setPhoneNumber(mboutiqueUser.getPhoneNumber());
-                    boutiqueUser.setFullName(mboutiqueUser.getFullName());*/
-                    //logedBoutiqueUser.setUserID(user.getUid());
-                    //Log.e("entour",boutiqueUser.getFullName());
-                    //sayHiToMe(mboutiqueUser);
                     //get the uri path for the profile image
                     if (boutiqueUser.getImagePath() != null) {
                         StorageReference storageReference = ConfigurationFirebase.getStorageReference().child(boutiqueUser.getImagePath());
-                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        storageReference.getDownloadUrl().
+                                addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
                                 //set the user profile image
@@ -65,6 +53,7 @@ public class LoggedUserSingleton {
                             public void onFailure(@NonNull Exception exception) {
                                 //do something
                             }
+
                         });
                     }
                 }
@@ -73,16 +62,7 @@ public class LoggedUserSingleton {
                 }
 
             });
-        //Log.e("entour",boutiqueUser.getFullName());
-
         }
-    }
-
-    public void sayHiToMe(BoutiqueUser outiqueUser) {
-        boutiqueUser = new BoutiqueUser();
-        boutiqueUser.setFullName(new String(outiqueUser.getFullName()));
-        boutiqueUser.setFullName("dddd");
-        Log.d("hi there, " ,boutiqueUser.getFullName());
     }
 
     public static synchronized LoggedUserSingleton getInstance() {
@@ -92,18 +72,7 @@ public class LoggedUserSingleton {
         return mInstance;
     }
 
-    /*public static synchronized boolean isLoggedUserSingletonNull(){
-        if(mInstance==null)
-            return true;
-        else
-            return false;
-    }*/
+    public BoutiqueUser getBoutiqueUser() { return boutiqueUser; }
 
-    public BoutiqueUser getBoutiqueUser() {
-        return boutiqueUser;
-    }
-
-    public void setBoutiqueUser(BoutiqueUser boutiqueUser) {
-        this.boutiqueUser = boutiqueUser;
-    }
+    public void setBoutiqueUser(BoutiqueUser boutiqueUser) { this.boutiqueUser = boutiqueUser; }
 }

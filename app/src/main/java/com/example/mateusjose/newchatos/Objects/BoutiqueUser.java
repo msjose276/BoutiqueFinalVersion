@@ -4,8 +4,11 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class BoutiqueUser {
 
@@ -24,13 +27,42 @@ public class BoutiqueUser {
     private String password;
     private String imagePath;
 
+    // path for the users in the firebase
+    public static final String users = "Users";
+    public static final String personalInfo = "PersonalInfo";
 
     public void BoutiqueUser(){}
 
     public void saveBoutiqueUserOnFirebaseDatabase(){
 
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
-        databaseReference.child("Users").child(getUserID()).setValue(this);
+        databaseReference.child(users).child(getUserID()).child(personalInfo).setValue(this);
+    }
+
+    //TODO: the return value for this method needs to be changed. it has to return a boolean value to indicate whether the operation was successful of not
+    public void saveNewImagePicture(Uri newUri){
+
+        // save the path of the file that needs to be deleted after the update
+        String fileToBeDeleted = this.getImagePath();
+        //upload image to the server before storing its reference to the user profile
+        StorageReference photoRef = ConfigurationFirebase.getStorageReference().child("UsersProfile").child(this.getUserID()).child(newUri.getLastPathSegment()+".jpg");
+        photoRef.putFile(newUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                setImagePath(taskSnapshot.getMetadata().getPath());
+            }
+        });
+
+        // Delete the profile picture of the user
+        if(fileToBeDeleted!=null) {
+            StorageReference photoRefDeletion = ConfigurationFirebase.getStorageReference().child(fileToBeDeleted);
+            photoRefDeletion.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // File deleted successfully
+                }
+            });
+        }
     }
 
     public String getUserID() {

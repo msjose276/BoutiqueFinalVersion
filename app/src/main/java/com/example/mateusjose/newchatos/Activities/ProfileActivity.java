@@ -79,6 +79,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (user != null) {
             //fill the page with the user information
             fillProfilePage();
+            Toast.makeText(this,LoggedUserSingleton.getInstance().getBoutiqueUser().getImagePath(), Toast.LENGTH_SHORT).show();
         } else {
             // No user is signed in
             Toast.makeText(this, userNotLoged, Toast.LENGTH_SHORT).show();
@@ -155,7 +156,9 @@ public class ProfileActivity extends AppCompatActivity {
             // check if the profile image has changed. if it has update the path
             if(pickedUri!=null){
 
-                // save the path of the file that needs to be deleted after the update
+                logedBoutiqueUser.saveNewImagePicture(pickedUri);
+                logedBoutiqueUser.saveBoutiqueUserOnFirebaseDatabase();
+                /*// save the path of the file that needs to be deleted after the update
                 String fileToBeDeleted = logedBoutiqueUser.getImagePath();
                 //upload image to the server before storing its reference to the user profile
                 StorageReference photoRef = ConfigurationFirebase.getStorageReference().child("UsersProfile").child(logedBoutiqueUser.getUserID()).child(pickedUri.getLastPathSegment()+".jpg");
@@ -170,14 +173,19 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
                 // Delete the profile picture of the user
-                StorageReference photoRefDeletion = ConfigurationFirebase.getStorageReference().child(fileToBeDeleted);
-                photoRefDeletion.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // File deleted successfully
-                    }
-                });
+                if(fileToBeDeleted!=null) {
+                    StorageReference photoRefDeletion = ConfigurationFirebase.getStorageReference().child(fileToBeDeleted);
+                    photoRefDeletion.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // File deleted successfully
+                        }
+                    });
+                }*/
             }// else save everything into the database
+
+
+
             else{
                 logedBoutiqueUser.saveBoutiqueUserOnFirebaseDatabase();
                 //update the profile page
