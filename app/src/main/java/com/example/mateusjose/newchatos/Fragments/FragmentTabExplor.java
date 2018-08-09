@@ -39,7 +39,7 @@ public class FragmentTabExplor extends android.support.v4.app.Fragment{
         ItemAdaptor adaptor = new ItemAdaptor(getContext(),listOfContacts);
 
 
-        final ListView listView = (ListView) page.findViewById(R.id.lvItem);
+        final ListView listView = (ListView) page.findViewById(R.id.rl_background_woman);
 
         listView.setAdapter(adaptor);
 

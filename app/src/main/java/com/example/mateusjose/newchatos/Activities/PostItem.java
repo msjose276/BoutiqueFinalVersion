@@ -118,12 +118,13 @@ public class PostItem extends AppCompatActivity {
             String itemID=mDatabase.child("ItemBoutique").push().getKey();
             itemBoutique.setItemID(itemID);
             //upload image to the server before storing the refence of the image in the itemBoutique
-            StorageReference photoRef = mStorageRef.child(itemBoutique.getItemID()).child(pickedUri.getLastPathSegment());
+            StorageReference photoRef = mStorageRef.child(itemBoutique.getItemID()).child(pickedUri.getLastPathSegment()+".jpg");
             photoRef.putFile(pickedUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                     itemBoutique.setImagePath(taskSnapshot.getMetadata().getPath());
+                    //taskSnapshot.getUploadSessionUri().get
                     sendBoutiqueItemToDatabase();
 
                 }
@@ -168,6 +169,7 @@ public class PostItem extends AppCompatActivity {
 
         if(requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK ){
             pickedUri = data.getData();
+            //pickedUri.get
         }
     }
 }

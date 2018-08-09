@@ -36,7 +36,7 @@ public class FragCamisas extends android.support.v4.app.Fragment{
 
 
 
-        mListView=(ListView) page.findViewById(R.id.lvItem);
+        mListView=(ListView) page.findViewById(R.id.rl_background_woman);
         mDatabase= FirebaseDatabase.getInstance().getReference();
         Query query = mDatabase.child("ItemBoutique").limitToLast(50);
 

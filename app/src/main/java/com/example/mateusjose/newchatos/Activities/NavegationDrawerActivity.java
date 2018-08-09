@@ -21,26 +21,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.mateusjose.newchatos.Nav_activities.NavFavorites;
 import com.example.mateusjose.newchatos.Nav_activities.NavDefinitionsActivity;
 import com.example.mateusjose.newchatos.Nav_activities.NavPaymentInformation;
 import com.example.mateusjose.newchatos.Nav_activities.NavStores;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
+import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
+import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
+import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.example.mateusjose.newchatos.TabsPager;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Arrays;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NavegationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,23 +60,36 @@ public class NavegationDrawerActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
-    public static final String USER_EMAIL = "USER_EMAIL";
-    public static final String USER_PASSWORD = "USER_PASSWORD";
-    public static final String USER_ID = "USER_ID";
+
+    public static final String users = "Users";
+
+
 
     public String EMAIL_LOGIN = null;
     public String PASSWORD_LOGIN = null;
     public String USER_ID_LOGIN = null;
     public Menu NavegationMenu=null;
 
+    FirebaseUser user;
+    BoutiqueUser logedBoutiqueUser;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+
+    CircleImageView profileImage;
+    TextView userName;
+    TextView phoneNumber;
+
+    NavigationView navigationView;
+
     // Choose authentication providers
     List<AuthUI.IdpConfig> providers = Arrays.asList(
             new AuthUI.IdpConfig.EmailBuilder().build(),
             new AuthUI.IdpConfig.GoogleBuilder().build());
     public static final int RC_SIGN_IN = 1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,16 +97,18 @@ public class NavegationDrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
+        //setNavigationDrawerHeader( navigationView);
+        LoggedUserSingleton.getInstance();
+        SingletonPatternForItemsSaved.getInstance();
         //**************** for sliding menu
 
         TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
@@ -96,36 +123,89 @@ public class NavegationDrawerActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-
-
-        // check if the user is already sign in
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                if(firebaseAuth.getCurrentUser() !=null){
-                    Toast.makeText(NavegationDrawerActivity.this, "it is already login", Toast.LENGTH_SHORT).show();
-                }else{
-
-                    Intent main = new Intent(getBaseContext(), Login.class);
-                    startActivity(main);
-
-                    /*// Create and launch sign-in intent
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setAvailableProviders(providers)
-                                    .build(),
-                            RC_SIGN_IN);*/
-                }
-            }
-        };
-
     }
 
+
+
+    //******************************************** update the user information in the navigation header ************************************************
+
+    public void setNavigationDrawerHeader(NavigationView navegationDrawerHeader){
+
+        View header = navegationDrawerHeader.getHeaderView(0);
+        profileImage = (CircleImageView)header.findViewById(R.id.iv_profile_image);
+        phoneNumber = (TextView)header.findViewById(R.id.tv_user_phone_number);
+        userName = (TextView)header.findViewById(R.id.tv_user_full_name);
+
+        //set the user email and profile image in the navegation drawer
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        if (user != null) {
+            // check if the user has already an instance of the singleton.
+            // if it has, there is no need to get the data from firebase again
+            if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
+                userName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
+
+                phoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
+                Glide.with(getBaseContext())
+                        .load(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl())
+                        .into(profileImage);
+                //Toast.makeText(this, LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl().toString(), Toast.LENGTH_SHORT).show();
+            } // if there is not an instance, get the data from the firebase
+            //else {
+                /*logedBoutiqueUser = new BoutiqueUser();
+
+
+                DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+                DatabaseReference ref = database.child(users);
+
+                //get the user data from the database
+                ref.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        logedBoutiqueUser = dataSnapshot.getValue(BoutiqueUser.class);
+                        //LoggedUserSingleton.getInstance().setBoutiqueUser(logedBoutiqueUser);
+                        logedBoutiqueUser.setUserID(user.getUid());
+                        //get the full name of the user
+                        userName.setText(logedBoutiqueUser.getFullName());
+                        phoneNumber.setText(logedBoutiqueUser.getPhoneNumber());
+
+                        if (logedBoutiqueUser.getImagePath() != null) {
+                            StorageReference storageReference = ConfigurationFirebase.getStorageReference().child(logedBoutiqueUser.getImagePath());
+                            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //set the user profile image
+                                    logedBoutiqueUser.setPhotoUrl(uri);
+                                    Glide.with(getBaseContext())
+                                            .load(logedBoutiqueUser.getPhotoUrl())
+                                            .into(profileImage);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    //do something
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });*/
+                //userName.setText("not very well done");
+            //}
+        }// if the user is not logged in
+        else {
+            userName.setText("anonimo usuario");
+            phoneNumber.setText("+244-923-222-222");
+            profileImage.setImageResource(R.drawable.user_general_image);
+        }
+    }
+
+    //********************************************************************************************
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -161,17 +241,34 @@ public class NavegationDrawerActivity extends AppCompatActivity
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             public void onComplete(@NonNull Task<Void> task) {
                                 // ...
+                                //update the navegation drawer
+                                user=null;
                                 Toast.makeText(NavegationDrawerActivity.this, "sign out", Toast.LENGTH_SHORT).show();
                             }
                         });
+
             } else {
 
                 // No user is signed in
                 //Toast.makeText(this, "Not signed in", Toast.LENGTH_SHORT).show();
                 Intent main = new Intent(getBaseContext(), Login.class);
                 startActivity(main);
+                //check if the user logged in successefully before assigning the user variable
+                if (FirebaseAuth.getInstance().getCurrentUser() != null)
+                    user=FirebaseAuth.getInstance().getCurrentUser();
+
             }
+
+
+            //update the navegation drawer
+            setNavigationDrawerHeader(navigationView);
             return true;
+        }
+        if(id == R.id.it_cart){
+            // start the saved items
+            Toast.makeText(this, "SavedItems", Toast.LENGTH_SHORT).show();
+            Intent main = new Intent(getBaseContext(), SavedItems.class);
+            startActivity(main);
         }
 
         return super.onOptionsItemSelected(item);
@@ -208,12 +305,15 @@ public class NavegationDrawerActivity extends AppCompatActivity
     @Override
     protected void onPause(){
         super.onPause();
-        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        //setNavigationDrawerHeader( navigationView);
+        //mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
     @Override
     protected void onResume(){
         super.onResume();
-        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+        Toast.makeText(this, "voltamos", Toast.LENGTH_SHORT).show();
+        setNavigationDrawerHeader( navigationView);
+        //mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
 

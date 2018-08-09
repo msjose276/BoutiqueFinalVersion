@@ -50,30 +50,9 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="23/08/1986"
-                android:id="@+id/tv_birthday"
-                android:layout_below="@+id/tv_full_name"
-                android:layout_centerHorizontal="true"
-
-                />
-
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cuando Cubango, Angola"
-                android:id="@+id/tv_address"
-                android:layout_below="@+id/tv_birthday"
-                android:layout_centerHorizontal="true"
-
-                />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="812 929 2903"
                 android:id="@+id/tv_cellphone_number"
-                android:layout_below="@+id/tv_address"
+                android:layout_below="@+id/tv_full_name"
                 android:layout_centerHorizontal="true"
 
                 />

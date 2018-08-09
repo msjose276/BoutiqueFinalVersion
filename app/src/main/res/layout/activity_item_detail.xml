@@ -7,108 +7,106 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.ItemDetail"
-    android:background="@color/blue1"
+    android:background="@color/white"
+
     >
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimension_300"
-        android:background="@drawable/item_card_border"
-        android:layout_margin="@dimen/dimension_20"
-        android:id="@+id/ll_images"
+        android:layout_height="350dp"
+        android:orientation="horizontal"
+        android:id="@+id/ll_main_linear_layout"
+        android:layout_marginLeft="@dimen/dimension_10"
+        android:layout_marginRight="@dimen/dimension_10"
+        android:layout_marginTop="@dimen/dimension_10"
         >
 
-
-        <TextView
-            android:layout_width="@dimen/dimension_20"
-            android:layout_height="@dimen/dimension_20"
-            android:layout_weight="2"
-            android:background="@drawable/item_card_border"
-            android:layout_marginTop="@dimen/dimension_150"
-            android:onClick="Back"
-            android:id="@+id/tv_back"
-
-            />
-        <ImageView
-            android:layout_margin="@dimen/dimension_20"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:src="@drawable/bonita"
-            android:id="@+id/iv_image_item"
-            />
+            android:layout_weight="3"
+            android:orientation="vertical"
+            >
 
-        <TextView
-            android:layout_width="@dimen/dimension_20"
-            android:layout_height="@dimen/dimension_20"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/tv_title"
+                android:text="Romanos"
+                android:textColor="@color/colorPrimary"
+                android:padding="5dp"
+
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/tv_price"
+                android:text="10,295 AKZ"
+                android:textColor="@color/colorPrimary"
+                android:padding="5dp"
+
+                />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimension_200"
+                android:layout_weight="20"
+
+                >
+                <ListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lv_list_image"
+                    >
+
+                </ListView>
+            </ScrollView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="2"
-            android:background="@drawable/item_card_border"
-            android:layout_marginTop="@dimen/dimension_150"
-            android:onClick="Forward"
-            android:id="@+id/tv_forward"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/roupa4"
+                android:id="@+id/iv_main_image"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_main_linear_layout"
+        android:id="@+id/sv_details"
+        android:layout_marginLeft="@dimen/dimension_10"
+        android:layout_marginRight="@dimen/dimension_10"
+
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_description"
+            android:text="Wanna to split a screen for my app with two LinearLayouts. What parameters should I use to make exact splitting in two equal parts"
             />
 
-    </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Titlulo: balabina"
-        android:id="@+id/tv_title"
-        android:layout_below="@+id/ll_images"
-        android:layout_marginLeft="@dimen/dimension_40"
-        android:textColor="@color/black"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Price: 4000 kz"
-        android:id="@+id/tv_price"
-        android:layout_below="@+id/tv_title"
-        android:layout_marginLeft="@dimen/dimension_40"
-        android:textColor="@color/black"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Localizacao: Rocha Pinto"
-        android:id="@+id/tv_location"
-        android:layout_below="@+id/tv_price"
-        android:layout_marginLeft="@dimen/dimension_40"
-        android:textColor="@color/black"
-
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Boutique: Maniquim"
-        android:id="@+id/tv_boutique"
-        android:layout_below="@+id/tv_location"
-        android:layout_marginLeft="@dimen/dimension_40"
-        android:textColor="@color/black"
-
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Horario de Atendimento: 8h - 17h"
-        android:id="@+id/tv_open_hours"
-        android:layout_below="@+id/tv_boutique"
-        android:layout_marginLeft="@dimen/dimension_40"
-        android:textColor="@color/black"
-
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimension_20"
-        android:background="@drawable/ic_menu_gallery"
+        android:layout_height="@dimen/dimension_50"
+        android:text="adicionar ao carrinho"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimension_20"
+        android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/dimension_20"
-        android:layout_marginBottom="@dimen/dimension_20"
-        android:onClick="SaveItem"
+        android:layout_margin="@dimen/dimension_10"
+        android:id="@+id/tv_add_to_the_cart"
         />
-
 </RelativeLayout>

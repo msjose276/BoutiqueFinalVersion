@@ -91,6 +91,7 @@ public class SignUp extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         boutiqueUser = new BoutiqueUser();
+        boutiqueUser.setFullName(String.valueOf(etFirstName.getText()));
         boutiqueUser.setEmail(String.valueOf(etEmail.getText()));
         boutiqueUser.setPassword(String.valueOf(etPassword.getText()));
 

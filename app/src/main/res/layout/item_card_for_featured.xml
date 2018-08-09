@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:text="Acessorios"
+        android:textSize="@dimen/dimension_30"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginLeft="@dimen/dimension_30"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_subtitle"
+        android:layout_below="@+id/tv_title"
+        android:text="1,250 itens"
+        android:textSize="@dimen/dimension_10"
+        android:textColor="@color/black"
+        android:layout_marginLeft="@dimen/dimension_30"
+
+        />
+
+
+
+
+</RelativeLayout>

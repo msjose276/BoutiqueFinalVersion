@@ -3,16 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal">
-
+    android:orientation="horizontal"
+    android:background="@drawable/border_for_main_item"
+    >
 
     <ImageView
+        android:layout_marginTop="@dimen/dimension_50"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimension_200"
+        android:layout_height="@dimen/dimension_300"
         android:id="@+id/iv_item_image"
         android:src="@drawable/bonita"
-        android:layout_margin="0dp"
+        android:layout_margin="1dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         />
+
+    <com.varunest.sparkbutton.SparkButton
+        android:id="@+id/spark_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:sparkbutton_activeImage="@drawable/icon_heart_full"
+        app:sparkbutton_inActiveImage="@drawable/icon_heart_empty"
+        app:sparkbutton_iconSize="20dp"
+        app:sparkbutton_primaryColor="@color/red"
+        app:sparkbutton_secondaryColor="@color/neutral_blue"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/dimension_5"
+        />
+
+
 
     <TextView
         android:id="@+id/tv_brand"
@@ -23,6 +42,7 @@
         android:paddingTop="4dp"
         android:layout_below="@+id/iv_item_image"
         android:layout_centerHorizontal="true"
+        android:textStyle="bold"
         />
     <TextView
         android:id="@+id/tv_title"
@@ -43,6 +63,10 @@
         android:paddingTop="4dp"
         android:layout_below="@+id/tv_title"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:layout_marginBottom="@dimen/dimension_20"
         />
+
 
 </RelativeLayout>

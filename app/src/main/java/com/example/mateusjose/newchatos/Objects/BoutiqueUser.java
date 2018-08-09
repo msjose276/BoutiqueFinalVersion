@@ -1,6 +1,8 @@
 package com.example.mateusjose.newchatos.Objects;
 
 import android.net.Uri;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
@@ -20,18 +22,18 @@ public class BoutiqueUser {
     private String fullName;
     private String creationDate;
     private String password;
+    private String imagePath;
+
 
     public void BoutiqueUser(){}
 
     public void saveBoutiqueUserOnFirebaseDatabase(){
 
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
-        databaseReference.child("users").child(getUserID()).setValue(this);
+        databaseReference.child("Users").child(getUserID()).setValue(this);
+        //Log.e("caminho",getUserID().toString());
     }
 
-
-
-    @Exclude
     public String getUserID() {
         return userID;
     }
@@ -118,5 +120,13 @@ public class BoutiqueUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

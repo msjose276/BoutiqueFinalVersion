@@ -21,6 +21,7 @@ public class Person {
     private String gender;
     private String birhtday;
     private String boutiqueName;
+    private String imagePath;
 
 
     public Person(){
@@ -139,5 +140,13 @@ public class Person {
 
     public void setBoutiqueName(String boutiqueName) {
         this.boutiqueName = boutiqueName;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

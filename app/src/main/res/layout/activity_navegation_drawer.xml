@@ -27,6 +27,8 @@
         android:background="@color/colorPrimary"
         app:itemTextColor="@color/white"
         android:paddingLeft="@dimen/dimension_30"
+        app:itemIconTint="@color/black"
+
         />
 
 </android.support.v4.widget.DrawerLayout>

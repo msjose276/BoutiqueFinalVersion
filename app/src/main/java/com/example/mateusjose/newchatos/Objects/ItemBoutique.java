@@ -20,6 +20,7 @@ public class ItemBoutique {
 
     private Uri photoUrl;
     private String imagePath;
+    private int itemPosition;
 
     public ItemBoutique(){
     }
@@ -146,5 +147,13 @@ public class ItemBoutique {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public int getItemPosition() {
+        return itemPosition;
+    }
+
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
     }
 }

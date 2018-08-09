@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimension_150"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="@dimen/dimension_150"
+        android:layout_height="match_parent"
+        android:id="@+id/rl_item_image"
+        android:background="@color/neutral_blue"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/iv_item_image"
+            android:src="@drawable/roupa4"
+            android:layout_margin="@dimen/dimension_10"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/dimension_20"
+        android:layout_toRightOf="@+id/rl_item_image"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="caravana"
+            android:id="@+id/tv_title"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ferdina"
+            android:id="@+id/tv_subtitle"
+            android:layout_below="@+id/tv_title"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1000kz"
+            android:id="@+id/tv_price"
+            android:layout_below="@+id/tv_subtitle"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

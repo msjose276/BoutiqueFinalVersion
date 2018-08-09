@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.mateusjose.newchatos.Activities.NavegationDrawerActivity"
-    tools:showIn="@layout/app_bar_navegation_drawer"
-    android:background="@color/white"
-    >
+    tools:context=".Activities.SavedItems"
+    tools:showIn="@layout/activity_saved_items">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container"
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:id="@+id/lv_saved_items"
+        >
 
+    </ListView>
 </android.support.constraint.ConstraintLayout>

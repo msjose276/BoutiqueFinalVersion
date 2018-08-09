@@ -30,6 +30,7 @@
     <string name="title_activity_nav_about_the_app">NavAboutTheAppActivity</string>
     <string name="title_activity_nav_my_boutiques">NavMyBoutiquesActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_saved_items">SavedItems</string>
 
 
 </resources>

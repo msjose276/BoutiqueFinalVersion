@@ -2,23 +2,32 @@ package com.example.mateusjose.newchatos.Fragments;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 
+import com.bumptech.glide.Glide;
+import com.example.mateusjose.newchatos.Activities.ItemDetail;
 import com.example.mateusjose.newchatos.Adaptor.MaterialAdaptor;
+import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.Contact;
 import com.example.mateusjose.newchatos.Activities.ExchangeMessageActivity;
 import com.example.mateusjose.newchatos.Adaptor.ItemAdaptor;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
 import com.example.mateusjose.newchatos.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +35,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkButtonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +59,14 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
 
     public MaterialAdaptor materialAdaptor;
     public ItemAdaptor itemAdaptor ;
-
+    public ItemBoutique itemBoutique;
     public static final String ANONYMOUS = "anonymous";
+    public static final String itemID = "itemID";
+
+
+
     private String mUsername;
+    private int position=0;
 
     @Nullable
     @Override
@@ -59,16 +75,14 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
         View page=inflater.inflate(R.layout.tab_general,container,false);
         page.setBackgroundResource(R.color.blue2);
 
-
         mUsername = ANONYMOUS;
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("ItemBoutique");
 
 
+        //************************************* list random itens from the database *********************
         // Initialize message ListView and its adapter
         List<ItemAdaptor> listOfItemAdaptor = new ArrayList<>();
-
         final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
         itemAdaptor = new ItemAdaptor(this.getContext(), listOfItemAdaptor);
         gvView.setAdapter(itemAdaptor);
@@ -77,7 +91,31 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                ItemBoutique itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
+                itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
+                itemBoutique.setItemPosition(position);
+                position++;
+
+                //get the firebase reference to download the url for the items's images
+                FirebaseStorage storage = ConfigurationFirebase.getFirebaseStorage();
+                // Create a storage reference from our app
+                StorageReference storageRef = storage.getReference();
+
+                if(itemBoutique.getImagePath()!=null){
+                    StorageReference storageReference = storageRef.child(itemBoutique.getImagePath());
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            //store the url for the picture
+                            itemBoutique.setPhotoUrl(uri);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            //do something
+                        }
+                    });
+                }
+
                 itemAdaptor.add(itemBoutique);
             }
             @Override
@@ -91,33 +129,20 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
         };
         mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
 
-
-
-        /*final List<ItemBoutique> listOfItemBoutique=new ArrayList<>();
-
-        listOfItemBoutique.add(new ItemBoutique("1111",(double) 134));
-        listOfItemBoutique.add(new ItemBoutique("222",(double) 9764));
-        listOfItemBoutique.add(new ItemBoutique("333",(double) 246));
-        listOfItemBoutique.add(new ItemBoutique("444",(double) 765));
-        listOfItemBoutique.add(new ItemBoutique("555",(double) 234));
-
-        //ItemAdaptor adaptor = new ItemAdaptor(getContext(),listOfContacts,1);
-        MaterialAdaptor adaptor = new MaterialAdaptor(getContext(),listOfItemBoutique);
-        //final ListView listView = (ListView) page.findViewById(R.id.lvItem);
-
-        final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
-        gvView.setAdapter(adaptor);
-
-        //mateus: set onclick listner for the list of items
+        //set onclick listener for the list of items
         gvView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //call the itemDetail activity for more detail about the item
+                Intent intent = new Intent(getContext(), ItemDetail.class);
+                ItemBoutique newItemBoutique = (ItemBoutique)parent.getItemAtPosition(position);
+                intent.putExtra("itemID",newItemBoutique.getItemID());
 
-                Intent intent = new Intent(getContext(), ExchangeMessageActivity.class);
                 startActivity(intent);
             }
-        });*/
+        });
 
         return page;
+
     }
 }

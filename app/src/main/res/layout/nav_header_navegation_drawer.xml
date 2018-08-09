@@ -32,7 +32,17 @@
         android:layout_height="wrap_content"
         android:text="Amelia Ricardo"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:id="@+id/tv_user_profile"
+        android:id="@+id/tv_user_full_name"
+        android:textSize="@dimen/dimension_20"
+        android:layout_marginTop="@dimen/dimension_10"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Amelia Ricardo"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:id="@+id/tv_user_phone_number"
+
         />
 
 

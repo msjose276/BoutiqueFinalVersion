@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#312472</color>
     <color name="colorPrimaryDark">#312472</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#312472</color>
 
     <color name="orange">#EF611F</color>
     <color name="darkBlue">#021E43</color>
@@ -13,6 +13,10 @@
     <color name="blue2">#5BC0EB</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="neutral_blue">#EBF0F7</color>
+    <color name="gray_88">#D7DCE0</color>
+
+    <color name="red">#FF0000</color>
 
 
 

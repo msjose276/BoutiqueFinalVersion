@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
+import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
+import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,7 +32,6 @@ public class Login extends AppCompatActivity {
     public static final String loggedIn = "loggedIn";
     public static final String USER_ID = "USER_ID";
 
-
     EditText etEmail;
     EditText etPassword;
 
@@ -43,6 +44,15 @@ public class Login extends AppCompatActivity {
         TextView tvSignUp = (TextView) findViewById(R.id.TV_register);
         etEmail = (EditText) findViewById(R.id.ET_email);
         etPassword = (EditText) findViewById(R.id.ET_password);
+        LoggedUserSingleton.getInstance();
+        SingletonPatternForItemsSaved.getInstance();
+
+        Toast.makeText(this, "first activity = Login", Toast.LENGTH_SHORT).show();
+        if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
+            Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 
@@ -62,6 +72,8 @@ public class Login extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+                                Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
+                                startActivity(intent);
                                 Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
                                 //finish the intent and go back to navegation drawer
                                 finish();
