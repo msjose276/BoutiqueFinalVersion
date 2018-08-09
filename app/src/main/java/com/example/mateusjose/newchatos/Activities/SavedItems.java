@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.mateusjose.newchatos.Adaptor.AdaptorForListOfImages;
@@ -44,6 +45,7 @@ public class SavedItems extends AppCompatActivity {
 
         // check if the user is signed in. if it is not get out of this page
         if(FirebaseAuth.getInstance().getCurrentUser()==null){
+            Toast.makeText(this, "precisa estar logado para ver os seus produtos favoritos", Toast.LENGTH_SHORT).show();
             finish();
         }
         // get the list and set the adptor

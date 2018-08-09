@@ -1,6 +1,7 @@
 package com.example.mateusjose.newchatos.Activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -146,58 +147,29 @@ public class NavegationDrawerActivity extends AppCompatActivity
             // check if the user has already an instance of the singleton.
             // if it has, there is no need to get the data from firebase again
             if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
-                userName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
+                //set the navegationDrawer header with the user information. if some is missing, it will be replace with the general one
+                if(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName()!=null){
+                    userName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
+                }
+                else {
+                    userName.setText("anonimo");
+                }
+                if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber()!=null){
+                    phoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
+                }
+                else{
+                    phoneNumber.setText("***-***-***");
+                }
+                if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl()!=null){
+                    Glide.with(getBaseContext())
+                            .load(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl())
+                            .into(profileImage);
+                }
+                else{
+                    profileImage.setImageResource(R.drawable.user_general_image);
+                }
+            }
 
-                phoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
-                Glide.with(getBaseContext())
-                        .load(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl())
-                        .into(profileImage);
-                //Toast.makeText(this, LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl().toString(), Toast.LENGTH_SHORT).show();
-            } // if there is not an instance, get the data from the firebase
-            //else {
-                /*logedBoutiqueUser = new BoutiqueUser();
-
-
-                DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-                DatabaseReference ref = database.child(users);
-
-                //get the user data from the database
-                ref.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        logedBoutiqueUser = dataSnapshot.getValue(BoutiqueUser.class);
-                        //LoggedUserSingleton.getInstance().setBoutiqueUser(logedBoutiqueUser);
-                        logedBoutiqueUser.setUserID(user.getUid());
-                        //get the full name of the user
-                        userName.setText(logedBoutiqueUser.getFullName());
-                        phoneNumber.setText(logedBoutiqueUser.getPhoneNumber());
-
-                        if (logedBoutiqueUser.getImagePath() != null) {
-                            StorageReference storageReference = ConfigurationFirebase.getStorageReference().child(logedBoutiqueUser.getImagePath());
-                            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    //set the user profile image
-                                    logedBoutiqueUser.setPhotoUrl(uri);
-                                    Glide.with(getBaseContext())
-                                            .load(logedBoutiqueUser.getPhotoUrl())
-                                            .into(profileImage);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    //do something
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });*/
-                //userName.setText("not very well done");
-            //}
         }// if the user is not logged in
         else {
             userName.setText("anonimo usuario");
@@ -249,18 +221,11 @@ public class NavegationDrawerActivity extends AppCompatActivity
                         });
 
             } else {
-
-                // No user is signed in
-                //Toast.makeText(this, "Not signed in", Toast.LENGTH_SHORT).show();
+                // No user is signed in, then it has to log in
                 Intent main = new Intent(getBaseContext(), Login.class);
                 startActivity(main);
-                //check if the user logged in successefully before assigning the user variable
-                if (FirebaseAuth.getInstance().getCurrentUser() != null)
-                    user=FirebaseAuth.getInstance().getCurrentUser();
-
+                finish();
             }
-
-
             //update the navegation drawer
             setNavigationDrawerHeader(navigationView);
             return true;

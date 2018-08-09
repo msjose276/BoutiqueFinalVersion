@@ -6,10 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.SignUp"
-    android:background="@color/blue1"
+    android:background="@color/colorPrimary"
     >
-
-
 
 
     <ScrollView
@@ -25,172 +23,93 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:id="@+id/relativeLayout">
+            android:id="@+id/relativeLayout"
+            android:layout_margin="@dimen/dimension_30"
+
+            >
 
             <EditText
                 android:layout_marginTop="@dimen/dimension_50"
                 android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/dimension_300"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/dimension_50"
                 android:inputType="textMultiLine"
                 android:ems="10"
-                android:id="@+id/ET_FName"
-                android:hint="first name"
-                android:textColor="@color/white"
+                android:id="@+id/tv_full_name"
+                android:hint="Nome completo"
+                android:textColor="@color/colorPrimary"
                 android:textAlignment="center"
-                android:background="@drawable/item_card_border_square"
+                android:background="@drawable/border_tv_login"
+                android:textStyle="italic"
                 />
+
 
             <EditText
                 android:layout_marginTop="10dp"
+                android:layout_below="@+id/tv_full_name"
                 android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/dimension_300"
-                android:layout_height="@dimen/dimension_50"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/ET_LName"
-                android:layout_below="@+id/ET_FName"
-                android:hint="last name"
-                android:textColor="@color/white"
-                android:textAlignment="center"
-                android:background="@drawable/item_card_border_square"
-                />
-
-            <EditText
-                android:layout_marginTop="10dp"
-                android:layout_centerHorizontal="true"
-                android:layout_width="300dp"
-                android:layout_height="30dp"
-                android:inputType="none"
-                android:ems="10"
-                android:id="@+id/ET_Birthday"
-                android:layout_below="@+id/ET_LName"
-                android:hint="dia/mes/ano"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textAlignment="center"
-                android:background="@drawable/item_card_border_square"
-
-                />
-            <TextView
-                android:layout_marginTop="@dimen/dimension_20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ET_Gender"
-                android:text="Genero"
-                android:textSize="18dp"
-                android:layout_below="@+id/ET_Birthday"
-                android:textColor="@color/white"
-                android:layout_marginLeft="@dimen/dimension_80"
-
-                />
-            <Spinner
-                android:layout_marginTop="5dp"
-                android:layout_width="@dimen/dimension_100"
-                android:layout_height="50dp"
-                android:id="@+id/SP_sex"
-                android:spinnerMode="dropdown"
-                android:layout_below="@+id/ET_Birthday"
-                android:layout_toRightOf="@+id/ET_Gender"
-                android:layout_marginLeft="@dimen/dimension_30"
-
-                />
-            <EditText
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/SP_sex"
-                android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/dimension_300"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/dimension_50"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/ET_cellNumber"
-                android:background="@drawable/item_card_border_square"
-                android:hint="numero de telefone"
-                android:textColor="@color/white"
+                android:id="@+id/et_cellphone"
+                android:background="@drawable/border_tv_login"
+                android:hint="Numero de telefone"
+                android:textColor="@color/colorPrimary"
                 android:textAlignment="center"
+                android:textStyle="italic"
+
                 />
 
             <EditText
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/ET_cellNumber"
+                android:layout_below="@+id/et_cellphone"
                 android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/dimension_300"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/dimension_50"
                 android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/ET_email"
-                android:background="@drawable/item_card_border_square"
-                android:hint="email"
-                android:textColor="@color/white"
+                android:id="@+id/et_email"
+                android:background="@drawable/border_tv_login"
+                android:hint="Email"
+                android:textColor="@color/colorPrimary"
                 android:textAlignment="center"
-                />
-            <EditText
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/ET_email"
-                android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/dimension_300"
-                android:layout_height="@dimen/dimension_50"
-                android:inputType="textMultiLine"
-                android:ems="10"
-                android:id="@+id/ET_confirmEmail"
-                android:background="@drawable/item_card_border_square"
-                android:hint="confirma o email"
-                android:textColor="@color/white"
-                android:textAlignment="center"
+                android:textStyle="italic"
+
                 />
 
 
             <EditText
                 android:layout_marginTop="10dp"
-                android:layout_below="@+id/ET_confirmEmail"
+                android:layout_below="@+id/et_email"
                 android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/dimension_300"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/dimension_50"
                 android:inputType="textPassword"
                 android:ems="10"
-                android:id="@+id/ET_password"
-                android:background="@drawable/item_card_border_square"
-                android:hint="palavra-passe"
-                android:textColor="@color/white"
-                android:textAlignment="center"/>
-
-            <EditText
-                android:layout_marginTop="10dp"
-                android:layout_below="@+id/ET_password"
-                android:layout_centerHorizontal="true"
-                android:layout_width="@dimen/dimension_300"
-                android:layout_height="@dimen/dimension_50"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/ET_passwordAgain"
-                android:background="@drawable/item_card_border_square"
-                android:hint="confirma palavra-passe"
-                android:textColor="@color/white"
+                android:id="@+id/et_password"
+                android:background="@drawable/border_tv_login"
+                android:hint="Palavra-passe"
+                android:textColor="@color/colorPrimary"
                 android:textAlignment="center"
+                android:textStyle="italic"
+
                 />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:text="ja tem conta? faca Login"
-                android:id="@+id/Registar"
-                android:layout_below="@+id/ET_passwordAgain"
-                android:onClick="BackToLogin"
-                />
+                android:text="Ja tem conta? Faca Login"
+                android:textColor="@color/white"
+                android:id="@+id/tv_registar"
+                android:layout_below="@+id/et_password"
+                android:onClick="login"
+                android:textStyle="italic"
 
-            <Switch
-                android:id="@+id/switch1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="boutiques"
-                android:layout_below="@id/Registar"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/dimension_70"
                 />
-
         </RelativeLayout>
-
 
     </ScrollView>
     <RelativeLayout
@@ -198,7 +117,6 @@
         android:id="@+id/RL_Lower"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue2"
         >
         <TextView
             android:layout_marginTop="1dp"
@@ -207,8 +125,11 @@
             android:text="REGISTER"
             android:textColor="@color/white"
             android:textAlignment="center"
+            android:textStyle="italic"
             android:paddingTop="10dp"
-            android:onClick="Register"
+            android:onClick="register"
+            android:background="@color/darkBlue"
+
             />
 
     </RelativeLayout>

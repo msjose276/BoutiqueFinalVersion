@@ -26,17 +26,21 @@ public class LoggedUserSingleton {
     public static final String personalInfo = "PersonalInfo";
 
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-    DatabaseReference refForPersonalInfo = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(personalInfo);
-    DatabaseReference refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
+    DatabaseReference refForPersonalInfo ;
+    DatabaseReference refForSavedItems ;
 
     private LoggedUserSingleton(){
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
+
+            refForPersonalInfo = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(personalInfo);
+            refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
 
             //get the user data from the database
             refForPersonalInfo.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     //save the data
+                    boutiqueUser = new BoutiqueUser();
                     boutiqueUser = dataSnapshot.getValue(BoutiqueUser.class);
                     //get the uri path for the profile image
                     if (boutiqueUser.getImagePath() != null) {
@@ -62,6 +66,12 @@ public class LoggedUserSingleton {
                 }
 
             });
+        }
+        else{
+            // after log out, the program arises everything user information
+            boutiqueUser = null;
+            refForPersonalInfo = null;
+            refForSavedItems = null;
         }
     }
 

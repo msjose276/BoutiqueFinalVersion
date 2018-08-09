@@ -114,13 +114,45 @@ public class ProfileActivity extends AppCompatActivity {
     //********************************** fill out the fields in the profile page
 
     public void fillProfilePage(){
-        LoggedUserSingleton.getInstance().getBoutiqueUser().setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        tvFullName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
-        tvEmail.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getEmail());
-        tvCellphoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
-        Glide.with(getBaseContext())
-                .load(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl())
-                .into(circleImageView);
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            LoggedUserSingleton.getInstance().getBoutiqueUser().setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+            if(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName()!=null){
+                tvFullName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
+
+            }else{
+                tvFullName.setText("usuario anonimo");
+                //tvFullName.setError("edita o seu nome completo por favor");
+            }
+            if(LoggedUserSingleton.getInstance().getBoutiqueUser().getEmail()!=null){
+                tvEmail.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getEmail());
+
+            }else{
+                tvEmail.setText("animo@gmail.com");
+                //tvEmail.setError("edita o seu email por favor");
+
+            }
+            if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber()!=null){
+                tvCellphoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
+
+            }else{
+                tvCellphoneNumber.setText("***-***-***");
+                //tvCellphoneNumber.setError("edita o teu numero de telefone por favor");
+            }
+
+            if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl()!=null){
+                Glide.with(getBaseContext())
+                        .load(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl())
+                        .into(circleImageView);
+            }else{
+                circleImageView.setImageResource(R.drawable.user_general_image);
+            }
+
+        }
+        else{
+            Toast.makeText(this, userNotLoged, Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
 
     }
@@ -158,34 +190,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                 logedBoutiqueUser.saveNewImagePicture(pickedUri);
                 logedBoutiqueUser.saveBoutiqueUserOnFirebaseDatabase();
-                /*// save the path of the file that needs to be deleted after the update
-                String fileToBeDeleted = logedBoutiqueUser.getImagePath();
-                //upload image to the server before storing its reference to the user profile
-                StorageReference photoRef = ConfigurationFirebase.getStorageReference().child("UsersProfile").child(logedBoutiqueUser.getUserID()).child(pickedUri.getLastPathSegment()+".jpg");
-                photoRef.putFile(pickedUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        logedBoutiqueUser.setImagePath(taskSnapshot.getMetadata().getPath());
-                        logedBoutiqueUser.saveBoutiqueUserOnFirebaseDatabase();
-                        //update the profile page
-                        fillProfilePage();
-                    }
-                });
-                // Delete the profile picture of the user
-                if(fileToBeDeleted!=null) {
-                    StorageReference photoRefDeletion = ConfigurationFirebase.getStorageReference().child(fileToBeDeleted);
-                    photoRefDeletion.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // File deleted successfully
-                        }
-                    });
-                }*/
-            }// else save everything into the database
-
-
-
+                LoggedUserSingleton.getInstance();
+            }
             else{
                 logedBoutiqueUser.saveBoutiqueUserOnFirebaseDatabase();
                 //update the profile page
