@@ -83,6 +83,7 @@ public class SingletonPatternForItemsSaved {
         //set the path and save the values
         DatabaseReference ref = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
         ref.child(itemBoutique.getItemID()).setValue(itemBoutique);
+
     }
 
     public void updateAllSavedItemsBoutique() {
@@ -94,7 +95,6 @@ public class SingletonPatternForItemsSaved {
 
     public void downloadSavedItemBoutique() {
 
-
     }
 
     public void addSavedItemBoutique(ItemBoutique itemBoutique) {
@@ -102,13 +102,14 @@ public class SingletonPatternForItemsSaved {
         if(ListOfSavedItemBoutique == null){
             ListOfSavedItemBoutique = new ArrayList<ItemBoutique>();
         }
+        Log.e("addSavedItemBoutique","passou aqui");
         //check if the itemBoutique is not already in the list
-        if(!ListOfSavedItemBoutique.contains(itemBoutique) ){
+        if(!ListOfSavedItemBoutique.contains(itemBoutique)){
             //update the list and update the firebase
             //ListOfSavedItemBoutique.add(itemBoutique);
             uploadSavedItemBoutique(itemBoutique);
+            Log.e("addSavedItemBoutique","entrou");
         }
-
     }
     public boolean searchByItemId(String itemID) {
 
@@ -116,12 +117,14 @@ public class SingletonPatternForItemsSaved {
             return false;
         }
 
-
+        Log.e("list lenght",Integer.toString(ListOfSavedItemBoutique.size()));
         for (ItemBoutique temp : ListOfSavedItemBoutique) {
-            if(temp.getItemID()==itemID)
+            Log.e(itemID +"==",temp.getItemID());
+            if(temp.getItemID().equals(itemID)){
+                Log.e("searchByItemId","igualou");
                 return true;
+            }
         }
-
         return false;
     }
 
@@ -150,6 +153,13 @@ public class SingletonPatternForItemsSaved {
         //ListOfSavedItemBoutique.remove(itemBoutique);
         //TODO: change the return value to wheever the actual return
         return true;
-        //updateAllSavedItemsBoutique();
+    }
+
+    public void printEverything(){
+        Log.e("listItem: ","esta fora");
+        for (ItemBoutique temp : ListOfSavedItemBoutique) {
+            Log.e("listItem: ",temp.getItemID());
+        }
+
     }
 }

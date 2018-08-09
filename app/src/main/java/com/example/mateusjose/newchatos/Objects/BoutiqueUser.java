@@ -31,7 +31,6 @@ public class BoutiqueUser {
 
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
         databaseReference.child("Users").child(getUserID()).setValue(this);
-        //Log.e("caminho",getUserID().toString());
     }
 
     public String getUserID() {

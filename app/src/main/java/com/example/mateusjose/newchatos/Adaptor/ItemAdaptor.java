@@ -112,11 +112,11 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
 
         //check if the user is logged before changing the state of the spark_button
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-
             spark_button = (SparkButton) convertView.findViewById(R.id.spark_button);
             // activate the heart buttom if the itemboutique is in the ListOfSavedItemBoutique
             if (SingletonPatternForItemsSaved.getInstance().searchByItemId(itemBoutique.getItemID())) {
                 //spark_button.setActivated(true);
+                Log.e("itemBoutique.getItemID:",itemBoutique.getItemID());
                 spark_button.setChecked(true);
             }
             spark_button.setEventListener(new SparkEventListener() {
@@ -124,10 +124,9 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
                 public void onEvent(ImageView button, boolean buttonState) {
                     if (SingletonPatternForItemsSaved.getInstance() != null) {
                         List<ItemBoutique> itemBoutiqueForSearch = SingletonPatternForItemsSaved.getInstance().getListOfSavedItemBoutique();
-
                         //check if the item is saved.
                         //if it is saved delete it from the list. Else, add it to the list
-                        if (itemBoutiqueForSearch.contains(itemBoutique)) {
+                        if (spark_button.isChecked()) {
                             SingletonPatternForItemsSaved.getInstance().deleteSavedItemBoutique(itemBoutique);
                             Toast.makeText(thisContext, "disSave", Toast.LENGTH_SHORT).show();
                         } else {

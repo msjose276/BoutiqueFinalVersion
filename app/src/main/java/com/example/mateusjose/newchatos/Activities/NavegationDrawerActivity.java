@@ -123,6 +123,7 @@ public class NavegationDrawerActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        SingletonPatternForItemsSaved.getInstance().printEverything();
     }
 
 

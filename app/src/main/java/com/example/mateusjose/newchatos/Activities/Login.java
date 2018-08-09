@@ -44,11 +44,12 @@ public class Login extends AppCompatActivity {
         TextView tvSignUp = (TextView) findViewById(R.id.TV_register);
         etEmail = (EditText) findViewById(R.id.ET_email);
         etPassword = (EditText) findViewById(R.id.ET_password);
-        LoggedUserSingleton.getInstance();
-        SingletonPatternForItemsSaved.getInstance();
+
 
         Toast.makeText(this, "first activity = Login", Toast.LENGTH_SHORT).show();
         if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
+            LoggedUserSingleton.getInstance();
+            SingletonPatternForItemsSaved.getInstance();
             Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
             startActivity(intent);
             finish();
@@ -72,6 +73,8 @@ public class Login extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+                                LoggedUserSingleton.getInstance();
+                                SingletonPatternForItemsSaved.getInstance();
                                 Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
                                 startActivity(intent);
                                 Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
