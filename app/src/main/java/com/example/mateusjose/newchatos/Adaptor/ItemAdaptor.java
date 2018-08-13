@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,15 +48,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by mateusjose on 1/9/18.
  */
 
+
+
 public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
 
     List<ItemBoutique> listCard;
     LayoutInflater layoutInflater;
-    ImageView ivItemImage;
-
-    TextView tvTitle;
     final Context thisContext;
-    SparkButton spark_button;
 
 
     public ItemAdaptor(@NonNull Context context, @NonNull List objects) {
@@ -66,108 +65,129 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
 
     }
 
+    static class ViewHolder {
+        TextView tvBrand;
+        TextView tvPrice;
+        ImageView ivItemImage;
+        TextView tvTitle;
+        SparkButton spark_button;
+    }
+
+
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
-            convertView=layoutInflater.inflate(R.layout.item_card,parent,false);
-        }
-        // get the views
-        ivItemImage= (ImageView) convertView.findViewById(R.id.iv_item_image);
-        //heartImage = (ImageView) convertView.findViewById(R.id.heartI);
 
-        TextView tvBrand= (TextView) convertView.findViewById(R.id.tv_brand);
-        tvTitle= (TextView) convertView.findViewById(R.id.tv_title);
-        TextView tvPrice= (TextView) convertView.findViewById(R.id.tv_price);
-        final ItemBoutique itemBoutique = listCard.get(position);
 
-        // ******************** set title, price and brand. Also, decrease the number of characters if it is longer than 20
-        if(itemBoutique.getTitle().length()>20)
-            tvBrand.setText(itemBoutique.getTitle().substring(0,10)+"...");
-        else
-            tvBrand.setText(itemBoutique.getTitle());
+        ViewHolder holder;
 
-        if(Double.toString(itemBoutique.getPrice()).length()>20)
-            tvPrice.setText(Double.toString(itemBoutique.getPrice()).substring(0,10)+"...");
-        else
-            tvPrice.setText(Double.toString(itemBoutique.getPrice()));
+        View rowView = convertView;
 
-        if (Integer.toString(itemBoutique.getItemPosition()).length()>20)
-            tvTitle.setText(Integer.toString(itemBoutique.getItemPosition()).substring(0,10)+"...");
-        else
-            tvTitle.setText(Integer.toString(itemBoutique.getItemPosition()));
 
-        //********************* check if the item has some photo url associated with it
-        if(itemBoutique.getPhotoUrl()!=null){
-            //if (itemBoutique.getItemPosition()==position) {
-            Log.e("imageUrl",itemBoutique.getPhotoUrl().toString());
 
-            Glide.with(getContext())
+        if (rowView == null) {
+            rowView = layoutInflater.inflate(R.layout.item_card, parent, false);
+
+            holder = new ViewHolder();
+            // get the views
+            holder.ivItemImage = (ImageView) rowView.findViewById(R.id.iv_item_image);
+            //heartImage = (ImageView) convertView.findViewById(R.id.heartI);
+
+            holder.tvBrand = (TextView) rowView.findViewById(R.id.tv_brand);
+            holder.tvTitle = (TextView) rowView.findViewById(R.id.tv_title);
+            holder.tvPrice = (TextView) rowView.findViewById(R.id.tv_price);
+
+
+            final ItemBoutique itemBoutique = listCard.get(position);
+
+            // ******************** set title, price and brand. Also, decrease the number of characters if it is longer than 20
+            if (itemBoutique.getTitle().length() > 20)
+                holder.tvBrand.setText(itemBoutique.getTitle().substring(0, 10) + "...");
+            else
+                holder.tvBrand.setText(itemBoutique.getTitle());
+
+            if (Double.toString(itemBoutique.getPrice()).length() > 20)
+                holder.tvPrice.setText(Double.toString(itemBoutique.getPrice()).substring(0, 10) + "...");
+            else
+                holder.tvPrice.setText(Double.toString(itemBoutique.getPrice()));
+
+            if (Integer.toString(itemBoutique.getItemPosition()).length() > 20)
+                holder.tvTitle.setText(Integer.toString(itemBoutique.getItemPosition()).substring(0, 10) + "...");
+            else
+                holder.tvTitle.setText(Integer.toString(itemBoutique.getItemPosition()));
+
+            //********************* check if the item has some photo url associated with it
+            if (itemBoutique.getPhotoUrl() != null) {
+                //if (itemBoutique.getItemPosition()==position) {
+                Log.e("imageUrl", itemBoutique.getPhotoUrl().toString());
+
+                Glide.with(getContext())
                         .load(itemBoutique.getPhotoUrl())
-                        .into(ivItemImage);
-        }
-        else{
-            ivItemImage.setImageResource(R.drawable.roupa1);
-        }
-
-
-        spark_button = (SparkButton) convertView.findViewById(R.id.spark_button);
-
-        final ImageView ivLike;
-
-        ivLike = (ImageView) convertView.findViewById(R.id.iv_like);
-
-        ivLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ivLike.setBackgroundResource(R.drawable.icon_heart_full);
-
-            }
-        });
-
-
-
-
-
-        //check if the user is logged before changing the state of the spark_button
-        if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-
-            // activate the heart buttom if the itemboutique is in the ListOfSavedItemBoutique
-            if (SingletonPatternForItemsSaved.getInstance().searchByItemId(itemBoutique.getItemID())) {
-                //spark_button.setActivated(true);
-                Log.e("itemBoutique.getItemID:",itemBoutique.getItemID());
-                spark_button.setChecked(true);
+                        .into(holder.ivItemImage);
+            } else {
+                holder.ivItemImage.setImageResource(R.drawable.roupa1);
             }
 
-            //-LIn_8ToqZu_q2dqlY8q
-            spark_button.setEventListener(new SparkEventListener() {
+
+            holder.spark_button = (SparkButton) convertView.findViewById(R.id.spark_button);
+
+            final ImageView ivLike;
+
+            ivLike = (ImageView) convertView.findViewById(R.id.iv_like);
+
+            ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onEvent(ImageView button, boolean buttonState) {
-                    if (SingletonPatternForItemsSaved.getInstance() != null) {
-                        List<ItemBoutique> itemBoutiqueForSearch = SingletonPatternForItemsSaved.getInstance().getListOfSavedItemBoutique();
-                        //check if the item is saved.
-                        //if it is saved delete it from the list. Else, add it to the list//
-                        //SingletonPatternForItemsSaved.getInstance().searchByItemId(itemBoutique.getItemID())
-                        if (spark_button.isChecked()) {
-                            SingletonPatternForItemsSaved.getInstance().deleteSavedItemBoutique(itemBoutique);
-                            Toast.makeText(thisContext, "disSave", Toast.LENGTH_SHORT).show();
-                            Toast.makeText(thisContext, Integer.toString(position), Toast.LENGTH_SHORT).show();
+                public void onClick(View v) {
+                    ivLike.setBackgroundResource(R.drawable.icon_heart_full);
 
-                        } else {
-                            SingletonPatternForItemsSaved.getInstance().addSavedItemBoutique(itemBoutique);
-                            Toast.makeText(thisContext, "save", Toast.LENGTH_SHORT).show();
-                            Toast.makeText(thisContext, Integer.toString(position), Toast.LENGTH_SHORT).show();
+                }
+            });
 
+
+            //check if the user is logged before changing the state of the spark_button
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+
+                // activate the heart buttom if the itemboutique is in the ListOfSavedItemBoutique
+                if (SingletonPatternForItemsSaved.getInstance().searchByItemId(itemBoutique.getItemID())) {
+                    //spark_button.setActivated(true);
+                    Log.e("itemBoutique.getItemID:", itemBoutique.getItemID());
+                    holder.spark_button.setChecked(true);
+                }
+
+                //-LIn_8ToqZu_q2dqlY8q
+                /*holder.spark_button.setEventListener(new SparkEventListener() {
+                    @Override
+                    public void onEvent(ImageView button, boolean buttonState) {
+                        if (SingletonPatternForItemsSaved.getInstance() != null) {
+                            List<ItemBoutique> itemBoutiqueForSearch = SingletonPatternForItemsSaved.getInstance().getListOfSavedItemBoutique();
+                            //check if the item is saved.
+                            //if it is saved delete it from the list. Else, add it to the list//
+                            //SingletonPatternForItemsSaved.getInstance().searchByItemId(itemBoutique.getItemID())
+                            if (holder.spark_button.isChecked()) {
+                                SingletonPatternForItemsSaved.getInstance().deleteSavedItemBoutique(itemBoutique);
+                                Toast.makeText(thisContext, "disSave", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(thisContext, Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                SingletonPatternForItemsSaved.getInstance().addSavedItemBoutique(itemBoutique);
+                                Toast.makeText(thisContext, "save", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(thisContext, Integer.toString(position), Toast.LENGTH_SHORT).show();
+
+                            }
                         }
                     }
-                }
-                @Override
-                public void onEventAnimationStart(ImageView button, boolean buttonState) { }
-                @Override
-                public void onEventAnimationEnd(ImageView button, boolean buttonState) { }
-            });
-        }
 
+                    @Override
+                    public void onEventAnimationStart(ImageView button, boolean buttonState) {
+                    }
+
+                    @Override
+                    public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+                    }
+                });*/
+            }
+
+        }
         return convertView;
     }
 
