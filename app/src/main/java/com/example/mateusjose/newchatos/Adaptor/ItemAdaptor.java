@@ -71,6 +71,7 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
         ImageView ivItemImage;
         TextView tvTitle;
         SparkButton spark_button;
+        ImageView ivLike;
     }
 
 
@@ -79,7 +80,7 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
 
-        ViewHolder holder;
+        final ViewHolder holder;
 
         View rowView = convertView;
 
@@ -96,8 +97,13 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
             holder.tvBrand = (TextView) rowView.findViewById(R.id.tv_brand);
             holder.tvTitle = (TextView) rowView.findViewById(R.id.tv_title);
             holder.tvPrice = (TextView) rowView.findViewById(R.id.tv_price);
+            holder.ivLike = (ImageView) rowView.findViewById(R.id.iv_like);
 
 
+        }
+        else {
+            holder = (ViewHolder) rowView.getTag();
+        }
             final ItemBoutique itemBoutique = listCard.get(position);
 
             // ******************** set title, price and brand. Also, decrease the number of characters if it is longer than 20
@@ -129,16 +135,15 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
             }
 
 
-            holder.spark_button = (SparkButton) convertView.findViewById(R.id.spark_button);
+            //holder.spark_button = (SparkButton) convertView.findViewById(R.id.spark_button);
 
-            final ImageView ivLike;
 
-            ivLike = (ImageView) convertView.findViewById(R.id.iv_like);
 
-            ivLike.setOnClickListener(new View.OnClickListener() {
+
+        holder.ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ivLike.setBackgroundResource(R.drawable.icon_heart_full);
+                    holder.ivLike.setBackgroundResource(R.drawable.icon_heart_full);
 
                 }
             });
@@ -187,7 +192,7 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
                 });*/
             }
 
-        }
+
         return convertView;
     }
 
