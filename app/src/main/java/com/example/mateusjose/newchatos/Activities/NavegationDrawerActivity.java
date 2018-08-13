@@ -219,6 +219,9 @@ public class NavegationDrawerActivity extends AppCompatActivity
                                 Toast.makeText(NavegationDrawerActivity.this, "sign out", Toast.LENGTH_SHORT).show();
                             }
                         });
+                FirebaseAuth.getInstance().signOut();
+                LoggedUserSingleton.getInstance().setBoutiqueUser(null);
+
 
             } else {
                 // No user is signed in, then it has to log in
@@ -246,20 +249,17 @@ public class NavegationDrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_boutiques) {
             Intent main = new Intent(getBaseContext(), PostItem.class);
             startActivity(main);
         } else if (id == R.id.nav_favorites) {
-            Intent main = new Intent(getBaseContext(), NavFavorites.class);
+            Intent main = new Intent(getBaseContext(), SavedItems.class);
             startActivity(main);
-        } else if (id == R.id.nav_stores) {
+        } else if (id == R.id.nav_settings) {
             Intent main = new Intent(getBaseContext(), NavStores.class);
             startActivity(main);
-        } else if (id == R.id.nav_payment_information) {
-            Intent main = new Intent(getBaseContext(), NavPaymentInformation.class);
-            startActivity(main);
-        } else if (id == R.id.nav_definitions) {
-            Intent main = new Intent(getBaseContext(), NavDefinitionsActivity.class);
+        } else if (id == R.id.nav_about_the_application) {
+            Intent main = new Intent(getBaseContext(), AboutTheApplication.class);
             startActivity(main);
         }
 

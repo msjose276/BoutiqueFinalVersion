@@ -1,5 +1,6 @@
 package com.example.mateusjose.newchatos.Fragments;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,32 +81,27 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("ItemBoutique");
 
-
         //************************************* list random itens from the database *********************
         // Initialize message ListView and its adapter
         List<ItemAdaptor> listOfItemAdaptor = new ArrayList<>();
+        //final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
         final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
-        itemAdaptor = new ItemAdaptor(this.getContext(), listOfItemAdaptor);
+
+                itemAdaptor = new ItemAdaptor(this.getContext(), listOfItemAdaptor);
         gvView.setAdapter(itemAdaptor);
 
         mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
-                itemBoutique.setItemPosition(position);
-                position++;
-
-                //get the firebase reference to download the url for the items's images
-                FirebaseStorage storage = ConfigurationFirebase.getFirebaseStorage();
-                // Create a storage reference from our app
-                StorageReference storageRef = storage.getReference();
+                final ItemBoutique itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
 
                 if(itemBoutique.getImagePath()!=null){
-                    StorageReference storageReference = storageRef.child(itemBoutique.getImagePath());
+                    //get the reference for the storage
+                    StorageReference storageReference = ConfigurationFirebase.getFirebaseStorage().getReference().child(itemBoutique.getImagePath());
                     storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+
                             //store the url for the picture
                             itemBoutique.setPhotoUrl(uri);
                         }
@@ -114,9 +111,10 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
                             //do something
                         }
                     });
-                }
 
+                }
                 itemAdaptor.add(itemBoutique);
+
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
@@ -142,6 +140,7 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
             }
         });
 
+        itemAdaptor.notifyDataSetChanged();
         return page;
 
     }

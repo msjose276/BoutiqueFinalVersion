@@ -84,38 +84,15 @@ public class ItemDetail extends AppCompatActivity {
                     itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
                     //logedBoutiqueUser.setUserID(user.getUid());
                     fillDetailPage();
-
-                    /*if(logedBoutiqueUser.getImagePath()!=null){
-
-                        StorageReference storageReference = ConfigurationFirebase.getStorageReference().child(logedBoutiqueUser.getImagePath());
-                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //store the url for the picture
-                                logedBoutiqueUser.setPhotoUrl(uri);
-                                Glide.with(getBaseContext())
-                                        .load(logedBoutiqueUser.getPhotoUrl())
-                                        .into(circleImageView);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                //do something
-                            }
-                        });
-                    }*/
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {}
             });
 
         }
-/*
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase= FirebaseDatabase.getInstance().getReference();
 
-*/
+
 
 
 

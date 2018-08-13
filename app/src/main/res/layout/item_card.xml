@@ -10,7 +10,7 @@
     <ImageView
         android:layout_marginTop="@dimen/dimension_50"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimension_300"
+        android:layout_height="250dp"
         android:id="@+id/iv_item_image"
         android:src="@drawable/bonita"
         android:layout_margin="1dp"
@@ -20,18 +20,24 @@
 
     <com.varunest.sparkbutton.SparkButton
         android:id="@+id/spark_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         app:sparkbutton_activeImage="@drawable/icon_heart_full"
         app:sparkbutton_inActiveImage="@drawable/icon_heart_empty"
-        app:sparkbutton_iconSize="20dp"
-        app:sparkbutton_primaryColor="@color/red"
+        app:sparkbutton_iconSize="25dp"
+        app:sparkbutton_primaryColor="@color/colorPrimary"
         app:sparkbutton_secondaryColor="@color/neutral_blue"
         android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/dimension_5"
+        android:layout_margin="@dimen/dimension_10"
         />
 
 
+    <ImageView
+        android:layout_width="@dimen/dimension_30"
+        android:layout_height="@dimen/dimension_30"
+        android:id="@+id/iv_like"
+        android:background="@drawable/icon_heart_empty"
+        />
 
     <TextView
         android:id="@+id/tv_brand"
@@ -39,7 +45,6 @@
         android:layout_height="wrap_content"
         android:text="Romanos"
         android:textAlignment="center"
-        android:paddingTop="4dp"
         android:layout_below="@+id/iv_item_image"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
@@ -50,7 +55,6 @@
         android:layout_height="wrap_content"
         android:text="Ferdinand"
         android:textAlignment="center"
-        android:paddingTop="4dp"
         android:layout_below="@+id/tv_brand"
         android:layout_centerHorizontal="true"
         />
@@ -60,7 +64,6 @@
         android:layout_height="wrap_content"
         android:text="10,450kz"
         android:textAlignment="center"
-        android:paddingTop="4dp"
         android:layout_below="@+id/tv_title"
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorPrimary"

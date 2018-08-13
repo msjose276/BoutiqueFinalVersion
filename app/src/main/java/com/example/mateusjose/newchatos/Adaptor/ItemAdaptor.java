@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,11 +52,11 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
     List<ItemBoutique> listCard;
     LayoutInflater layoutInflater;
     ImageView ivItemImage;
-    TextView tvTitle;
-    Context thisContext;
 
+    TextView tvTitle;
+    final Context thisContext;
     SparkButton spark_button;
-    ItemBoutique itemBoutique;
+
 
     public ItemAdaptor(@NonNull Context context, @NonNull List objects) {
         super(context, R.layout.item_card, objects);
@@ -67,16 +68,18 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView=layoutInflater.inflate(R.layout.item_card,parent,false);
         }
         // get the views
         ivItemImage= (ImageView) convertView.findViewById(R.id.iv_item_image);
+        //heartImage = (ImageView) convertView.findViewById(R.id.heartI);
+
         TextView tvBrand= (TextView) convertView.findViewById(R.id.tv_brand);
         tvTitle= (TextView) convertView.findViewById(R.id.tv_title);
         TextView tvPrice= (TextView) convertView.findViewById(R.id.tv_price);
-        itemBoutique = listCard.get(position);
+        final ItemBoutique itemBoutique = listCard.get(position);
 
         // ******************** set title, price and brand. Also, decrease the number of characters if it is longer than 20
         if(itemBoutique.getTitle().length()>20)
@@ -96,42 +99,65 @@ public class ItemAdaptor extends ArrayAdapter<ItemBoutique> {
 
         //********************* check if the item has some photo url associated with it
         if(itemBoutique.getPhotoUrl()!=null){
-            if (itemBoutique.getItemPosition()==position) {
-                Glide.with(getContext())
+            //if (itemBoutique.getItemPosition()==position) {
+            Log.e("imageUrl",itemBoutique.getPhotoUrl().toString());
+
+            Glide.with(getContext())
                         .load(itemBoutique.getPhotoUrl())
                         .into(ivItemImage);
-            } else {
-                Glide.with(getContext()).clear(ivItemImage);
-                ivItemImage.setImageResource(R.drawable.bonita);
-            }
         }
         else{
             ivItemImage.setImageResource(R.drawable.roupa1);
         }
 
 
+        spark_button = (SparkButton) convertView.findViewById(R.id.spark_button);
+
+        final ImageView ivLike;
+
+        ivLike = (ImageView) convertView.findViewById(R.id.iv_like);
+
+        ivLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ivLike.setBackgroundResource(R.drawable.icon_heart_full);
+
+            }
+        });
+
+
+
+
+
         //check if the user is logged before changing the state of the spark_button
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-            spark_button = (SparkButton) convertView.findViewById(R.id.spark_button);
+
             // activate the heart buttom if the itemboutique is in the ListOfSavedItemBoutique
             if (SingletonPatternForItemsSaved.getInstance().searchByItemId(itemBoutique.getItemID())) {
                 //spark_button.setActivated(true);
                 Log.e("itemBoutique.getItemID:",itemBoutique.getItemID());
                 spark_button.setChecked(true);
             }
+
+            //-LIn_8ToqZu_q2dqlY8q
             spark_button.setEventListener(new SparkEventListener() {
                 @Override
                 public void onEvent(ImageView button, boolean buttonState) {
                     if (SingletonPatternForItemsSaved.getInstance() != null) {
                         List<ItemBoutique> itemBoutiqueForSearch = SingletonPatternForItemsSaved.getInstance().getListOfSavedItemBoutique();
                         //check if the item is saved.
-                        //if it is saved delete it from the list. Else, add it to the list
+                        //if it is saved delete it from the list. Else, add it to the list//
+                        //SingletonPatternForItemsSaved.getInstance().searchByItemId(itemBoutique.getItemID())
                         if (spark_button.isChecked()) {
                             SingletonPatternForItemsSaved.getInstance().deleteSavedItemBoutique(itemBoutique);
                             Toast.makeText(thisContext, "disSave", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(thisContext, Integer.toString(position), Toast.LENGTH_SHORT).show();
+
                         } else {
                             SingletonPatternForItemsSaved.getInstance().addSavedItemBoutique(itemBoutique);
                             Toast.makeText(thisContext, "save", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(thisContext, Integer.toString(position), Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 }

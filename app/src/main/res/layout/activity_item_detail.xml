@@ -65,7 +65,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -76,8 +76,20 @@
                 android:src="@drawable/roupa4"
                 android:id="@+id/iv_main_image"
                 />
+            <com.varunest.sparkbutton.SparkButton
+                android:id="@+id/spark_button"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                app:sparkbutton_activeImage="@drawable/icon_heart_full"
+                app:sparkbutton_inActiveImage="@drawable/icon_heart_empty"
+                app:sparkbutton_iconSize="25dp"
+                app:sparkbutton_primaryColor="@color/colorPrimary"
+                app:sparkbutton_secondaryColor="@color/neutral_blue"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/dimension_10"
+                />
 
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"

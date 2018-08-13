@@ -8,24 +8,18 @@
     <group android:checkableBehavior="single"
         >
         <item
-            android:id="@+id/nav_home"
-            android:title="Pagina inicial"
-
+            android:id="@+id/nav_boutiques"
+            android:title="Boutiques"
             />
         <item
             android:id="@+id/nav_favorites"
             android:title="Favaritos" />
         <item
-            android:id="@+id/nav_stores"
-            android:title="Lojas" />
+            android:id="@+id/nav_settings"
+            android:title="Definicoes" />
         <item
-            android:id="@+id/nav_payment_information"
-            android:title="Informacao de pagament"
-            />
-        <item
-            android:id="@+id/nav_definitions"
-            android:title="definicoes"
-
+            android:id="@+id/nav_about_the_application"
+            android:title="Acerca do applicativo"
             />
     </group>
 
