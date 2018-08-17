@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
         Toast.makeText(this, "first activity = Login", Toast.LENGTH_SHORT).show();
         if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
             LoggedUserSingleton.getInstance();
-            SingletonPatternForItemsSaved.getInstance();
+            //SingletonPatternForItemsSaved.getInstance();
             Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
             startActivity(intent);
             finish();
@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 LoggedUserSingleton.getInstance();
-                                SingletonPatternForItemsSaved.getInstance();
+                                //SingletonPatternForItemsSaved.getInstance();
                                 Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
                                 startActivity(intent);
                                 Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();

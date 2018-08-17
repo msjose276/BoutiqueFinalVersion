@@ -44,7 +44,7 @@ public class SingletonPatternForItemsSaved {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                         // TODO: handle the post Comment movedComment = dataSnapshot.getValue(Comment.class);
-                        ListOfSavedItemBoutique.add(postSnapshot.getValue(ItemBoutique.class));
+                        //ListOfSavedItemBoutique.add(postSnapshot.getValue(ItemBoutique.class));
                         Log.e("item number","dddd");
                     }
                 }

@@ -20,23 +20,15 @@
 
     <com.varunest.sparkbutton.SparkButton
         android:id="@+id/spark_button"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
         app:sparkbutton_activeImage="@drawable/icon_heart_full"
         app:sparkbutton_inActiveImage="@drawable/icon_heart_empty"
-        app:sparkbutton_iconSize="25dp"
+        app:sparkbutton_iconSize="15dp"
         app:sparkbutton_primaryColor="@color/colorPrimary"
         app:sparkbutton_secondaryColor="@color/neutral_blue"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/dimension_10"
-        />
-
-
-    <ImageView
-        android:layout_width="@dimen/dimension_30"
-        android:layout_height="@dimen/dimension_30"
-        android:id="@+id/iv_like"
-        android:background="@drawable/icon_heart_empty"
         />
 
     <TextView

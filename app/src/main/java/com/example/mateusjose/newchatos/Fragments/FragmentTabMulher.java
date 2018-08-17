@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.example.mateusjose.newchatos.Activities.ItemDetail;
+import com.example.mateusjose.newchatos.Adaptor.ItemAdapter2;
 import com.example.mateusjose.newchatos.Adaptor.MaterialAdaptor;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.Contact;
@@ -60,7 +61,7 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
 
 
     public MaterialAdaptor materialAdaptor;
-    public ItemAdaptor itemAdaptor ;
+    public ItemAdapter2 itemAdaptor ;
     public ItemBoutique itemBoutique;
     public static final String ANONYMOUS = "anonymous";
     public static final String itemID = "itemID";
@@ -83,12 +84,21 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
 
         //************************************* list random itens from the database *********************
         // Initialize message ListView and its adapter
-        List<ItemAdaptor> listOfItemAdaptor = new ArrayList<>();
+        /*List<ItemAdaptor> listOfItemAdaptor = new ArrayList<>();
         //final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
         final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
 
                 itemAdaptor = new ItemAdaptor(this.getContext(), listOfItemAdaptor);
         gvView.setAdapter(itemAdaptor);
+*/
+
+        List<ItemAdapter2> listOfItemAdaptor = new ArrayList<>();
+        //final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
+        final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
+
+        itemAdaptor = new ItemAdapter2(this.getContext());
+        gvView.setAdapter(itemAdaptor);
+
 
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -113,7 +123,8 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
                     });
 
                 }
-                itemAdaptor.add(itemBoutique);
+                //itemAdaptor.add(itemBoutique);
+                itemAdaptor.addItem(itemBoutique);
 
             }
             @Override

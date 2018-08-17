@@ -6,6 +6,7 @@ import android.net.Uri;
 public class ItemBoutique {
 
     private String Title;
+    private String brand;
     private String typeOfItem;
     private String size;
     private double price;
@@ -155,5 +156,13 @@ public class ItemBoutique {
 
     public void setItemPosition(int itemPosition) {
         this.itemPosition = itemPosition;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

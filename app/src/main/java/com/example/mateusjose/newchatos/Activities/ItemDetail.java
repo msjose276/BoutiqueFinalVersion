@@ -19,7 +19,9 @@ import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.Contact;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
+import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
 import com.example.mateusjose.newchatos.Objects.Person;
+import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +34,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,15 +51,11 @@ public class ItemDetail extends AppCompatActivity {
 
     public String ITEM_ID;
 
+    final String users = "Users";
+    final String savedItems = "SavedItems";
+    DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+    DatabaseReference refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
 
-
-
-
-
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    //ItemBoutique itemBoutique;
-    Person posterPerson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,94 +92,31 @@ public class ItemDetail extends AppCompatActivity {
         }
 
 
+        final SparkButton spark_button = (SparkButton) findViewById(R.id.spark_button);
+        // set onclick listner fo the like button
+        spark_button.setEventListener(new SparkEventListener() {
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+                if (SingletonPatternForItemsSaved.getInstance() != null) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //ItemBoutique itemBoutique= new ItemBoutique();
-        //Query query = mDatabase.child("ItemBoutique").orderByChild("itemID").equalTo(ITEM_ID).limitToLast(50);
-
-        //get the information about the product
-/*
-        mDatabase.child("ItemBoutique").child(ITEM_ID).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get user value
-                        itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
-                        TextView price = (TextView) findViewById(R.id.tv_price);
-                        TextView title = (TextView) findViewById(R.id.tv_title);
-                        price.setText("Preco : "+Double.toString(itemBoutique.getPrice()));
-                        title.setText("Tilulo : "+itemBoutique.getTitle());
-                        //location.setText();
-                        //boutique.setText();
-                        //openHours.setText();
-
+                    if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null){
+                        if (spark_button.isChecked()) {
+                            addSavedItemBoutique(itemBoutique.getItemID());
+                        } else {
+                            deleteSavedItemBoutique(itemBoutique.getItemID());
+                        }
+                    }
+                    else{
+                        Toast.makeText(ItemDetail.this, "faca o login pra poder salvar itens", Toast.LENGTH_SHORT).show();
                     }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(ItemDetail.this, "erro de conexao a internet", Toast.LENGTH_SHORT).show();
-                        //Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                    }
-                });
-*/
-
-
-        //get the information about the poster's name........ itemBoutique.getPosterID()
-       /* mDatabase.child("Users").child("qTMOgIg5trYOQOD3Z20cgdu0fHA2").addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Get user value
-                        posterPerson = dataSnapshot.getValue(Person.class);
-                        *//*TextView location = (TextView) findViewById(R.id.tv_location);
-                        TextView boutique = (TextView) findViewById(R.id.tv_boutique);
-
-                        //location.setText("Localizacao: "+ posterPerson.getAddress().getProvince() +", "+ posterPerson.getAddress().getMonicipio());
-                        location.setText("Localizacao: Luanda, Benfica");
-                        //boutique.setText("Boutique: "+posterPerson.getBoutiqueName());
-                        boutique.setText("Boutique: Dabeleza");
-*//*
-                        //openHours.setText();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(ItemDetail.this, "erro de conexao a internet", Toast.LENGTH_SHORT).show();
-                        //Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                    }
-                });*/
-
-        /*TextView back = (TextView) findViewById(R.id.tv_back);
-        ImageView imageItem = (ImageView) findViewById(R.id.iv_image_item);
-        TextView forward = (TextView) findViewById(R.id.tv_forward);*/
+                }
+            }
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) { }
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) { }
+        });
 
     }
 
@@ -189,6 +126,8 @@ public class ItemDetail extends AppCompatActivity {
         TextView price = (TextView)findViewById(R.id.tv_price);
         TextView description = (TextView)findViewById(R.id.tv_description);
         TextView addToTheCart = (TextView)findViewById(R.id.tv_add_to_the_cart);
+        final SparkButton spark_button = (SparkButton) findViewById(R.id.spark_button);
+
 
         title.setText(itemBoutique.getTitle());
         price.setText(String.valueOf(itemBoutique.getPrice()));
@@ -219,51 +158,83 @@ public class ItemDetail extends AppCompatActivity {
                 }
             });
         }
+
+
+
+        if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
+
+            refForSavedItems.child(itemBoutique.getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.exists()) {
+                        spark_button.setChecked(true);
+                    }
+                    else{
+                        spark_button.setChecked(false);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+
+            });
+
+        }
+
     }
 
 
     public void addListOfImages(){
 
-
         final List<Uri> listOfImages=new ArrayList<>();
-        listOfImages.add(Uri.parse("https://www.google.com/search?q=clothes&safe=strict&rlz=1C5CHFA_enUS791US791&source=lnms&tbm=isch&sa=X&ved=0ahUKEwi0ycftudbcAhVLEawKHd2dBDoQ_AUIDCgD&biw=1280&bih=726&safe=high#imgrc=SqVWjNy9iIBJFM:"));
-        listOfImages.add(Uri.parse("https://www.google.com/search?q=clothes&safe=strict&rlz=1C5CHFA_enUS791US791&source=lnms&tbm=isch&sa=X&ved=0ahUKEwi0ycftudbcAhVLEawKHd2dBDoQ_AUIDCgD&biw=1280&bih=726&safe=high#imgdii=40M8k3k9zjpp1M:&imgrc=SqVWjNy9iIBJFM:"));
+        listOfImages.add(Uri.parse("https://firebasestorage.googleapis.com/v0/b/boutiques-151ce.appspot.com/o/boutique_items%2F-LIl9RUnQ7j669zyGL1t%2Fimage%3A89?alt=media&token=b6976e77-0089-44e7-8af3-e85ffc23a40e"));
+        listOfImages.add(Uri.parse("https://firebasestorage.googleapis.com/v0/b/boutiques-151ce.appspot.com/o/boutique_items%2F-LIn_8ToqZu_q2dqlY8q%2F154?alt=media&token=8772d551-94e7-4f29-8622-1dfe3bc229bc"));
 
-        //Mateus: call and set the card adaptor
+        //call and set the card adaptor
         AdaptorForListOfImages adaptor = new AdaptorForListOfImages(getBaseContext(),listOfImages);
 
         final ListView listView = (ListView)findViewById(R.id.lv_list_image);
         listView.setAdapter(adaptor);
 
-        //mateus: set onclick listner for the list of items
+        // set onclick listner for the list of items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ImageView mainImage = (ImageView)findViewById(R.id.iv_main_image);
                 Uri uri = (Uri) parent.getItemAtPosition(position);
-
                 Glide.with(getBaseContext())
                         .load(uri)
                         .into(mainImage);
-
             }
         });
 
     }
 
 
+    public void deleteSavedItemBoutique(String ItemID) {
 
-
-    public void SaveItem(View view){
-
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-
-        if(firebaseUser==null){
-            Toast.makeText(this, "para salvar roupas e acessorios precisa de estar login", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            //save item for each user
-            //mDatabase.child("ItemSaved").child(firebaseUser.getUid()).setValue(ITEM_ID);
-        }
+        // delete itemID
+        refForSavedItems.child(ItemID).removeValue().
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //return true;
+                        Toast.makeText(ItemDetail.this, "item deletado dos seus favoridos com sucesso", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //return false;
+                    }
+                });
     }
+
+    public void addSavedItemBoutique(String ItemID) {
+        //save itemID
+        refForSavedItems.child(ItemID).setValue(ItemID);
+        Toast.makeText(ItemDetail.this, "item adicionado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
+    }
+
 }

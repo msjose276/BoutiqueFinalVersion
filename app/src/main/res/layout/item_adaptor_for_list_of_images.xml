@@ -4,18 +4,23 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:background="@drawable/border_for_main_item"
+    android:background="@color/white"
     >
 
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimension_300"
+        android:layout_height="140dp"
         android:id="@+id/iv_item_image"
-        android:src="@drawable/bonita"
-        android:layout_margin="1dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
+        android:background="@drawable/border_square_bg_w_border_gray"
+        android:padding="1dp"
+        android:layout_marginRight="@dimen/dimension_10"
+        android:layout_marginBottom="@dimen/dimension_10"
+        android:layout_marginTop="@dimen/dimension_10"
+
+
         />
 
 </RelativeLayout>
