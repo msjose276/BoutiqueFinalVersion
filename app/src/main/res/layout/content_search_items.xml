@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Activities.SearchItems"
+    tools:showIn="@layout/activity_search_items">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="@drawable/border_for_search_bar"
+        android:layout_marginTop="@dimen/dimension_10"
+        android:layout_marginBottom="@dimen/dimension_10"
+        android:hint="pesquisar itens"
+        android:paddingLeft="@dimen/dimension_30"
+        android:id="@+id/et_search_bar"
+        />
+
+    <GridView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="2"
+        android:id="@+id/gvItem"
+        android:layout_below="@+id/et_search_bar"
+        android:background="@color/white"
+        android:layout_gravity="top"
+        >
+    </GridView>
+
+
+</RelativeLayout>

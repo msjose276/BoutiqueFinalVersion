@@ -87,7 +87,6 @@ public class ItemAdapter2 extends BaseAdapter {
         }
 
 
-
         if(listItems.get(position).getTitle().length()>20)
             holder.tvBrand.setText(listItems.get(position).getTitle().substring(0,10)+"...");
         else

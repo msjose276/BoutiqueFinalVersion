@@ -9,6 +9,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,24 +61,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class NavegationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
-
-    public static final String users = "Users";
-
-
-
-    public String EMAIL_LOGIN = null;
-    public String PASSWORD_LOGIN = null;
-    public String USER_ID_LOGIN = null;
-    public Menu NavegationMenu=null;
 
     FirebaseUser user;
-    BoutiqueUser logedBoutiqueUser;
-
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
 
 
     CircleImageView profileImage;
@@ -83,13 +71,12 @@ public class NavegationDrawerActivity extends AppCompatActivity
     TextView phoneNumber;
 
     NavigationView navigationView;
-
-    // Choose authentication providers
-    List<AuthUI.IdpConfig> providers = Arrays.asList(
-            new AuthUI.IdpConfig.EmailBuilder().build(),
-            new AuthUI.IdpConfig.GoogleBuilder().build());
     public static final int RC_SIGN_IN = 1;
 
+    final String users = "Users";
+    final String itemBoutique = "ItemBoutique";
+    DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+    DatabaseReference refForItemBoutique = database.child(itemBoutique);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +108,34 @@ public class NavegationDrawerActivity extends AppCompatActivity
         //********************** end of sliding menu
 
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        SearchBar();
 
-        SingletonPatternForItemsSaved.getInstance().printEverything();
+    }
+
+
+
+    public void SearchBar(){
+        EditText searchBar = (EditText) findViewById(R.id.et_search_bar);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() != 0){
+                    Intent main = new Intent(getBaseContext(), SearchItems.class);
+                    startActivity(main);
+
+                }
+            }
+        });
     }
 
 
@@ -140,7 +151,6 @@ public class NavegationDrawerActivity extends AppCompatActivity
 
         //set the user email and profile image in the navegation drawer
         user = FirebaseAuth.getInstance().getCurrentUser();
-
 
 
         if (user != null) {
@@ -272,14 +282,12 @@ public class NavegationDrawerActivity extends AppCompatActivity
     protected void onPause(){
         super.onPause();
         //setNavigationDrawerHeader( navigationView);
-        //mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
     @Override
     protected void onResume(){
         super.onResume();
         Toast.makeText(this, "voltamos", Toast.LENGTH_SHORT).show();
         setNavigationDrawerHeader( navigationView);
-        //mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
 
@@ -313,9 +321,6 @@ public class NavegationDrawerActivity extends AppCompatActivity
         startActivity(main);
     }
 
-    public void SignIn(){
 
-
-    }
 }
 

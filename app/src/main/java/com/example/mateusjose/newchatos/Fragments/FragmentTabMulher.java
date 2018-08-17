@@ -9,18 +9,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
 import com.example.mateusjose.newchatos.Activities.ItemDetail;
+import com.example.mateusjose.newchatos.Activities.NavegationDrawerActivity;
 import com.example.mateusjose.newchatos.Adaptor.ItemAdapter2;
 import com.example.mateusjose.newchatos.Adaptor.MaterialAdaptor;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
@@ -67,9 +72,14 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
     public static final String itemID = "itemID";
 
 
+    public View p;
 
-    private String mUsername;
-    private int position=0;
+
+
+    //final String itemBoutique_ = "ItemBoutique";
+    DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+    DatabaseReference refForItemBoutique = database.child("ItemBoutique");
+
 
     @Nullable
     @Override
@@ -77,23 +87,16 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
 
         View page=inflater.inflate(R.layout.tab_general,container,false);
         page.setBackgroundResource(R.color.blue2);
+        p = page;
 
-        mUsername = ANONYMOUS;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("ItemBoutique");
 
         //************************************* list random itens from the database *********************
         // Initialize message ListView and its adapter
-        /*List<ItemAdaptor> listOfItemAdaptor = new ArrayList<>();
-        //final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
-        final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
 
-                itemAdaptor = new ItemAdaptor(this.getContext(), listOfItemAdaptor);
-        gvView.setAdapter(itemAdaptor);
-*/
 
         List<ItemAdapter2> listOfItemAdaptor = new ArrayList<>();
-        //final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
         final GridView gvView = (GridView) page.findViewById(R.id.gvItem);
 
         itemAdaptor = new ItemAdapter2(this.getContext());
@@ -152,7 +155,11 @@ public class FragmentTabMulher extends android.support.v4.app.Fragment{
         });
 
         itemAdaptor.notifyDataSetChanged();
+        //SearchBar();
         return page;
 
     }
+
+
+
 }

@@ -70,6 +70,7 @@ public class ItemDetail extends AppCompatActivity {
 
         itemBoutique.setItemID(intent.getStringExtra(itemID));
 
+        // see if the item has an ID
         if (itemBoutique.getItemID()!=null) {
 
             //set the data reference for the item boutique
@@ -82,30 +83,32 @@ public class ItemDetail extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     itemBoutique = new ItemBoutique();
                     itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
-                    //logedBoutiqueUser.setUserID(user.getUid());
                     fillDetailPage();
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {}
             });
 
+        }//if it does not, closes the page. an big error has occured
+        else{
+            Toast.makeText(this, "aconteceu um erro", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
-
+        // set onclick listener fo the like button
         final SparkButton spark_button = (SparkButton) findViewById(R.id.spark_button);
-        // set onclick listner fo the like button
         spark_button.setEventListener(new SparkEventListener() {
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
                 if (SingletonPatternForItemsSaved.getInstance() != null) {
-
+                    //see if the user is logged before saving the liked item
                     if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null){
                         if (spark_button.isChecked()) {
                             addSavedItemBoutique(itemBoutique.getItemID());
                         } else {
                             deleteSavedItemBoutique(itemBoutique.getItemID());
                         }
-                    }
+                    }// else, do nothing
                     else{
                         Toast.makeText(ItemDetail.this, "faca o login pra poder salvar itens", Toast.LENGTH_SHORT).show();
                     }
@@ -121,7 +124,6 @@ public class ItemDetail extends AppCompatActivity {
     }
 
     public void fillDetailPage(){
-
         TextView title = (TextView)findViewById(R.id.tv_title);
         TextView price = (TextView)findViewById(R.id.tv_price);
         TextView description = (TextView)findViewById(R.id.tv_description);
@@ -132,7 +134,7 @@ public class ItemDetail extends AppCompatActivity {
         title.setText(itemBoutique.getTitle());
         price.setText(String.valueOf(itemBoutique.getPrice()));
         description.setText(itemBoutique.getDescription());
-
+        // check ig the item has an image and sets it
         if(itemBoutique.getImagePath()!=null){
 
             StorageReference storageRef = ConfigurationFirebase.getStorageReference();
@@ -160,9 +162,8 @@ public class ItemDetail extends AppCompatActivity {
         }
 
 
-
+        // check if the item is on the saved items from the user, if the user is logged
         if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
-
             refForSavedItems.child(itemBoutique.getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -177,9 +178,7 @@ public class ItemDetail extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                 }
-
             });
-
         }
 
     }
@@ -187,13 +186,14 @@ public class ItemDetail extends AppCompatActivity {
 
     public void addListOfImages(){
 
+        //TODO: need to add new images coming from the firebase connected to the itemBoutique
         final List<Uri> listOfImages=new ArrayList<>();
+        // these are only place holders
         listOfImages.add(Uri.parse("https://firebasestorage.googleapis.com/v0/b/boutiques-151ce.appspot.com/o/boutique_items%2F-LIl9RUnQ7j669zyGL1t%2Fimage%3A89?alt=media&token=b6976e77-0089-44e7-8af3-e85ffc23a40e"));
         listOfImages.add(Uri.parse("https://firebasestorage.googleapis.com/v0/b/boutiques-151ce.appspot.com/o/boutique_items%2F-LIn_8ToqZu_q2dqlY8q%2F154?alt=media&token=8772d551-94e7-4f29-8622-1dfe3bc229bc"));
 
         //call and set the card adaptor
         AdaptorForListOfImages adaptor = new AdaptorForListOfImages(getBaseContext(),listOfImages);
-
         final ListView listView = (ListView)findViewById(R.id.lv_list_image);
         listView.setAdapter(adaptor);
 
@@ -212,8 +212,8 @@ public class ItemDetail extends AppCompatActivity {
     }
 
 
+    //delete the item from the firebase database
     public void deleteSavedItemBoutique(String ItemID) {
-
         // delete itemID
         refForSavedItems.child(ItemID).removeValue().
                 addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -231,6 +231,7 @@ public class ItemDetail extends AppCompatActivity {
                 });
     }
 
+    // save the item into the firebase database
     public void addSavedItemBoutique(String ItemID) {
         //save itemID
         refForSavedItems.child(ItemID).setValue(ItemID);

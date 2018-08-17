@@ -71,6 +71,8 @@ public class Login extends AppCompatActivity {
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            Toast.makeText(Login.this, "passo 5555", Toast.LENGTH_SHORT).show();
+
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 LoggedUserSingleton.getInstance();
@@ -98,6 +100,7 @@ public class Login extends AppCompatActivity {
                             }
                             // ...
                         }
+
                     });
         }
     }

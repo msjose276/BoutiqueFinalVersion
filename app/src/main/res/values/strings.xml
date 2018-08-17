@@ -32,6 +32,7 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_saved_items">SavedItems</string>
     <string name="title_activity_about_the_application">AboutTheApplication</string>
+    <string name="title_activity_search_items">SearchItems</string>
 
 
 </resources>

@@ -20,7 +20,7 @@
         <activity
             android:name=".Activities.NavegationDrawerActivity"
             android:label="@string/title_activity_navegation_drawer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Nav_activities.NavMyShareActivity"
             android:label="@string/title_activity_menu_new_group_chat"
@@ -97,6 +97,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mateusjose.newchatos.Activities.NavegationDrawerActivity" />
         </activity>
+        <activity
+            android:name=".Activities.SearchItems"
+            android:label="@string/title_activity_search_items"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
