@@ -33,6 +33,7 @@ import com.example.mateusjose.newchatos.Nav_activities.NavStores;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.example.mateusjose.newchatos.TabsPager;
@@ -73,10 +74,8 @@ public class NavegationDrawerActivity extends AppCompatActivity
     NavigationView navigationView;
     public static final int RC_SIGN_IN = 1;
 
-    final String users = "Users";
-    final String itemBoutique = "ItemBoutique";
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-    DatabaseReference refForItemBoutique = database.child(itemBoutique);
+    DatabaseReference refForItemBoutique = database.child(ProjStrings.ItemBoutique);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,34 +104,24 @@ public class NavegationDrawerActivity extends AppCompatActivity
 
         viewPager.setAdapter(tabsPager);
         tabLayout.setupWithViewPager(viewPager);
-        //********************** end of sliding menu
 
-
+        //call the search bar funtion
         SearchBar();
-
     }
-
-
 
     public void SearchBar(){
         EditText searchBar = (EditText) findViewById(R.id.et_search_bar);
-
         searchBar.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void afterTextChanged(Editable s) {}
-
             @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() != 0){
+                    // call a new activity
                     Intent main = new Intent(getBaseContext(), SearchItems.class);
                     startActivity(main);
-
                 }
             }
         });
@@ -152,38 +141,26 @@ public class NavegationDrawerActivity extends AppCompatActivity
         //set the user email and profile image in the navegation drawer
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-
-        if (user != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             // check if the user has already an instance of the singleton.
             // if it has, there is no need to get the data from firebase again
             if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
                 //set the navegationDrawer header with the user information. if some is missing, it will be replace with the general one
-                if(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName()!=null){
-                    userName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
-                }
-                else {
-                    userName.setText("anonimo");
-                }
-                if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber()!=null){
-                    phoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
-                }
-                else{
-                    phoneNumber.setText("***-***-***");
-                }
+                if(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName()!=null){ userName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName()); }
+                else { userName.setText(ProjStrings.AnonimousUserName); }
+                if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber()!=null){ phoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber()); }
+                else{ phoneNumber.setText(ProjStrings.AnonimousUserPhonenumber); }
                 if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl()!=null){
                     Glide.with(getBaseContext())
                             .load(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl())
                             .into(profileImage);
                 }
-                else{
-                    profileImage.setImageResource(R.drawable.user_general_image);
-                }
+                else{ profileImage.setImageResource(R.drawable.user_general_image); }
             }
-
         }// if the user is not logged in
         else {
-            userName.setText("anonimo usuario");
-            phoneNumber.setText("+244-923-222-222");
+            userName.setText(ProjStrings.AnonimousUserName);
+            phoneNumber.setText(ProjStrings.AnonimousUserPhonenumber);
             profileImage.setImageResource(R.drawable.user_general_image);
         }
     }
@@ -208,31 +185,15 @@ public class NavegationDrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.it_login_sign_up) {
             //if the user if login
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-
-                //sign out
-                AuthUI.getInstance()
-                        .signOut(this)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            public void onComplete(@NonNull Task<Void> task) {
-                                // ...
-                                //update the navegation drawer
-                                user=null;
-                                Toast.makeText(NavegationDrawerActivity.this, "sign out", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                // sign out and delete the user information
                 FirebaseAuth.getInstance().signOut();
                 LoggedUserSingleton.getInstance().setBoutiqueUser(null);
-
-
             } else {
                 // No user is signed in, then it has to log in
                 Intent main = new Intent(getBaseContext(), Login.class);
@@ -245,11 +206,9 @@ public class NavegationDrawerActivity extends AppCompatActivity
         }
         if(id == R.id.it_cart){
             // start the saved items
-            Toast.makeText(this, "SavedItems", Toast.LENGTH_SHORT).show();
             Intent main = new Intent(getBaseContext(), SavedItems.class);
             startActivity(main);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -272,7 +231,6 @@ public class NavegationDrawerActivity extends AppCompatActivity
             Intent main = new Intent(getBaseContext(), AboutTheApplication.class);
             startActivity(main);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -286,7 +244,6 @@ public class NavegationDrawerActivity extends AppCompatActivity
     @Override
     protected void onResume(){
         super.onResume();
-        Toast.makeText(this, "voltamos", Toast.LENGTH_SHORT).show();
         setNavigationDrawerHeader( navigationView);
     }
 
@@ -305,8 +262,7 @@ public class NavegationDrawerActivity extends AppCompatActivity
                 BoutiqueUser boutiqueUser = new BoutiqueUser();
                 boutiqueUser.setEmail(user.getEmail());
                 boutiqueUser.setFullName(user.getDisplayName());
-                //mDatabase.u
-                // ...
+
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
@@ -320,7 +276,5 @@ public class NavegationDrawerActivity extends AppCompatActivity
         Intent main = new Intent(getBaseContext(), ProfileActivity.class);
         startActivity(main);
     }
-
-
 }
 

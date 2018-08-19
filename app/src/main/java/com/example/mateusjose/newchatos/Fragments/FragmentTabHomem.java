@@ -75,7 +75,7 @@ public class FragmentTabHomem extends android.support.v4.app.Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View page=inflater.inflate(R.layout.tab_general,container,false);
-        page.setBackgroundResource(R.color.blue1);
+        page.setBackgroundResource(R.color.white);
 
 
         final GridView mListView = (GridView) page.findViewById(R.id.gvItem);
@@ -159,74 +159,6 @@ public class FragmentTabHomem extends android.support.v4.app.Fragment{
         };
 
         mListView.setAdapter(firebaseListAdapter);
-
-/*
-
-        mUsername = ANONYMOUS;
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        //mFirebaseAuth = FirebaseAuth.getInstance();
-        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("ItemBoutique");
-
-        mFirebaseStorage = FirebaseStorage.getInstance();
-
-
-        mListView=(ListView) page.findViewById(R.id.lvItem);
-        mDatabase= FirebaseDatabase.getInstance().getReference();
-        //Query query = mDatabase.child("ItemBoutique").limitToLast(50);
-
-*/
-
-
-       /* // Initialize message ListView and its adapter
-        List<ItemBoutique> itemBoutiques = new ArrayList<>();
-        itemAdaptor= new ItemAdaptor(this, R.layout.card, itemBoutiques);
-        mListView=(ListView) page.findViewById(R.id.lvItem);
-        mListView.setAdapter(itemAdaptor);
-
-
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                FriendlyMessage friendlyMessage=dataSnapshot.getValue(FriendlyMessage.class);
-                mMessageAdapter.add(friendlyMessage);
-            }
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        };
-        mMessagesDatabaseReference.addChildEventListener(mChildEventListener);
-
-
-
-*/
-
-
-
-
-
-
-
-        /*mListView.setAdapter(firebaseListAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Intent intent = new Intent(getContext(), ItemDetail.class);
-                //pass the user email and password to the next activity
-                intent.putExtra(ITEM_ID_STRING,firebaseListAdapter.getItem(position).getItemID());
-                startActivity(intent);
-                startActivity(intent);
-            }
-        });*/
-
-
-
 
 
         return page;

@@ -39,10 +39,6 @@ public class SearchItems extends AppCompatActivity {
 
 
     public ItemAdapter2 itemAdaptor ;
-
-
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mMessagesDatabaseReference;
     private ChildEventListener mChildEventListener;
 
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
@@ -56,23 +52,9 @@ public class SearchItems extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
-
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mMessagesDatabaseReference = mFirebaseDatabase.getReference().child("ItemBoutique");
-
-
-
+        //get the edittext and search the firebase database whenever the edittext changes
         EditText searchBar = (EditText) findViewById(R.id.et_search_bar);
-
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {}
@@ -83,18 +65,16 @@ public class SearchItems extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() != 0){
 
-
-
                     List<ItemAdapter2> listOfItemAdaptor = new ArrayList<>();
                     final GridView gvView = (GridView) findViewById(R.id.gvItem);
-
                     itemAdaptor = new ItemAdapter2(getBaseContext());
                     gvView.setAdapter(itemAdaptor);
 
-
+                    // create a new event listener
                     mChildEventListener = new ChildEventListener() {
                         @Override
                         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            // create a new ItemBoutique and store the data
                             final ItemBoutique itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
 
                             if(itemBoutique.getImagePath()!=null){
@@ -103,7 +83,6 @@ public class SearchItems extends AppCompatActivity {
                                 storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-
                                         //store the url for the picture
                                         itemBoutique.setPhotoUrl(uri);
                                     }
@@ -115,9 +94,7 @@ public class SearchItems extends AppCompatActivity {
                                 });
 
                             }
-                            //itemAdaptor.add(itemBoutique);
                             itemAdaptor.addItem(itemBoutique);
-
                         }
                         @Override
                         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
@@ -128,26 +105,26 @@ public class SearchItems extends AppCompatActivity {
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) { }
                     };
-                    mMessagesDatabaseReference.orderByChild("title").equalTo(s.toString()).addChildEventListener(mChildEventListener);
+                    // set the reference for the item to be search
+                    refForItemBoutique.orderByChild("title").startAt(s.toString()).addChildEventListener(mChildEventListener);
 
                     //set onclick listener for the list of items
                     gvView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             //call the itemDetail activity for more detail about the item
+                            Intent intent = new Intent(getBaseContext(), ItemDetail.class);
+                            ItemBoutique newItemBoutique = (ItemBoutique)parent.getItemAtPosition(position);
+                            intent.putExtra("itemID",newItemBoutique.getItemID());
 
+                            startActivity(intent);
                         }
                     });
 
                     itemAdaptor.notifyDataSetChanged();
-
-
-
                 }
             }
         });
-
-
 
     }
 

@@ -2,6 +2,13 @@ package com.example.mateusjose.newchatos.Objects;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 public class ItemBoutique {
 
@@ -30,6 +37,39 @@ public class ItemBoutique {
         this.price=price;
         this.Title= Title;
     }
+
+
+    public void addSavedItemBoutique() {
+        DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+        DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ProjStrings.SavedItems);
+
+        refForSavedItems.child(this.itemID).setValue(this.itemID);
+        //Toast.makeText(context, "item adicionado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
+    }
+
+    public void deleteSavedItemBoutique() {
+
+        DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+        DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ProjStrings.SavedItems);
+
+        // delete itemID
+        refForSavedItems.child(this.itemID).removeValue().
+                addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //return true;
+                        //Toast.makeText(context, "item deletado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //return false;
+                    }
+                });
+    }
+
+
     public String getTitle() {
         return Title;
     }

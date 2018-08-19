@@ -14,10 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.ExchangeMessageActivity"
-            android:label="@string/title_activity_exchange_message"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activities.NavegationDrawerActivity"
             android:label="@string/title_activity_navegation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />

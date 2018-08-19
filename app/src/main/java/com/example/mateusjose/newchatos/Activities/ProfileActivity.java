@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.R;
 import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -54,8 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String edit =  "edit perfil";
     private static final String doneEditing =  "salvar alteracoes";
     private static final String doneEdit =  "dados do perfil do usuario actualizados com sucesso";
-    private static final String users =  "Users";
-    private static final String userNotLoged =  "o usuario nao esta logado";
+    //private static final String userNotLoged =  "o usuario nao esta logado";
 
 
     @Override
@@ -73,16 +74,18 @@ public class ProfileActivity extends AppCompatActivity {
         tvEmail = (EditText) findViewById(R.id.tv_email);
         tvEmail.setEnabled(false);
         tvEdit = (TextView) findViewById(R.id.tv_edit);
+        RelativeLayout cover = (RelativeLayout) findViewById(R.id.rl_bg_cover);
 
+        //cover.setBackgroundResource(R.drawable.profile_page_bg);
+        cover.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         // get the current user
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             //fill the page with the user information
             fillProfilePage();
-            Toast.makeText(this,LoggedUserSingleton.getInstance().getBoutiqueUser().getImagePath(), Toast.LENGTH_SHORT).show();
         } else {
             // No user is signed in
-            Toast.makeText(this, userNotLoged, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, ProjStrings.UserNotLoged, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -118,26 +121,22 @@ public class ProfileActivity extends AppCompatActivity {
             LoggedUserSingleton.getInstance().getBoutiqueUser().setUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
             if(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName()!=null){
-                tvFullName.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
+                tvFullName.setText("Name: "+LoggedUserSingleton.getInstance().getBoutiqueUser().getFullName());
 
             }else{
-                tvFullName.setText("usuario anonimo");
-                //tvFullName.setError("edita o seu nome completo por favor");
+                tvFullName.setText("Name: "+ProjStrings.AnonimousUserName);
             }
             if(LoggedUserSingleton.getInstance().getBoutiqueUser().getEmail()!=null){
-                tvEmail.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getEmail());
+                tvEmail.setText("Email: "+LoggedUserSingleton.getInstance().getBoutiqueUser().getEmail());
 
             }else{
-                tvEmail.setText("animo@gmail.com");
-                //tvEmail.setError("edita o seu email por favor");
-
+                tvEmail.setText("Email: "+ProjStrings.AnonimousUserEmail);
             }
             if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber()!=null){
-                tvCellphoneNumber.setText(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
+                tvCellphoneNumber.setText("Telefone: "+LoggedUserSingleton.getInstance().getBoutiqueUser().getPhoneNumber());
 
             }else{
-                tvCellphoneNumber.setText("***-***-***");
-                //tvCellphoneNumber.setError("edita o teu numero de telefone por favor");
+                tvCellphoneNumber.setText("Telefone: "+ProjStrings.AnonimousUserPhonenumber);
             }
 
             if(LoggedUserSingleton.getInstance().getBoutiqueUser().getPhotoUrl()!=null){
@@ -148,9 +147,11 @@ public class ProfileActivity extends AppCompatActivity {
                 circleImageView.setImageResource(R.drawable.user_general_image);
             }
 
+
+
         }
         else{
-            Toast.makeText(this, userNotLoged, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, ProjStrings.UserNotLoged, Toast.LENGTH_SHORT).show();
             finish();
         }
 

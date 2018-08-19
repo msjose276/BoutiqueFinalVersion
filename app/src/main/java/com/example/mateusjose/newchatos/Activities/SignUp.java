@@ -16,6 +16,7 @@ import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
 import com.example.mateusjose.newchatos.Objects.Person;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -53,20 +54,20 @@ public class SignUp extends AppCompatActivity {
 
          //If the first and last names fields are empty, do not allow sign up.
         if(fullName.getText().toString().matches("")){
-            fullName.setError("por favor, escreva o seu nome completo");
-            Toast.makeText(this, "por favor, escreva o seu nome completo", Toast.LENGTH_SHORT).show();
+            fullName.setError(ProjStrings.Please + ProjStrings.WriteYourFullName);
+            Toast.makeText(this, ProjStrings.Please + ProjStrings.WriteYourFullName, Toast.LENGTH_SHORT).show();
         }
         else if(email.getText().toString().matches("")) {
-            email.setError("por favor, escreva o seu email aqui");
-            Toast.makeText(this, "por favor, escreva o seu email aqui", Toast.LENGTH_SHORT).show();
+            email.setError(ProjStrings.Please + ProjStrings.WriteYourEmail);
+            Toast.makeText(this, ProjStrings.Please + ProjStrings.WriteYourEmail, Toast.LENGTH_SHORT).show();
         }
         else if(cellphone.getText().toString().equals("") || cellphone.getText().toString().length()<8){
-            cellphone.setError("este campo nao pode estar vazio. por favor escreva o seu numero de tefone");
-            Toast.makeText(this, "por favor escreva o seu numero de tefone", Toast.LENGTH_SHORT).show();
+            cellphone.setError(ProjStrings.WriteYourPhoneNumer);
+            Toast.makeText(this, ProjStrings.WriteYourPhoneNumer, Toast.LENGTH_SHORT).show();
         }
         else if(password.getText().toString().length()<8){
-            password.setError("por favor, coloque uma palavra-passe com pelo menos 8 caracteres");
-            Toast.makeText(this, "password not long enough", Toast.LENGTH_SHORT).show();
+            password.setError(ProjStrings.WriteYourPassword);
+            Toast.makeText(this, ProjStrings.WriteYourPassword, Toast.LENGTH_SHORT).show();
         }
         else {
 

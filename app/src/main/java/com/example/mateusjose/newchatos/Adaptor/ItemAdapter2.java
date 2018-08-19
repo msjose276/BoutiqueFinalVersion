@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,16 +36,12 @@ import java.util.List;
 
 public class ItemAdapter2 extends BaseAdapter {
 
-
     private LayoutInflater inflater;
     Context context;
     private ArrayList<ItemBoutique> listItems;
 
-    final String users = "Users";
-    final String savedItems = "SavedItems";
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-    DatabaseReference refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
-
+    DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ProjStrings.SavedItems);
 
     static class ViewHolder{
         ImageView ivItemImage;
@@ -86,7 +83,6 @@ public class ItemAdapter2 extends BaseAdapter {
             holder = (ViewHolder)rowView.getTag();
         }
 
-
         if(listItems.get(position).getTitle().length()>20)
             holder.tvBrand.setText(listItems.get(position).getTitle().substring(0,10)+"...");
         else
@@ -104,11 +100,7 @@ public class ItemAdapter2 extends BaseAdapter {
 
         //********************* check if the item has some photo url associated with it
         if(listItems.get(position).getPhotoUrl()!=null){
-            //if (itemBoutique.getItemPosition()==position) {
             Log.e("imageUrl",listItems.get(position).getPhotoUrl().toString());
-
-            holder.ivItemImage.setImageResource(R.drawable.roupa1);
-
             Glide.with(rowView.getContext())
                     .load(listItems.get(position).getPhotoUrl())
                     .into(holder.ivItemImage);
@@ -118,20 +110,15 @@ public class ItemAdapter2 extends BaseAdapter {
         }
 
 
+        // check if the item is in the saved item
         refForSavedItems.child(listItems.get(position).getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.exists()) {
-                    holder.spark_button.setChecked(true);
-                }
-                else{
-                    holder.spark_button.setChecked(false);
-                }
+                if (dataSnapshot.exists()) { holder.spark_button.setChecked(true); }
+                else{ holder.spark_button.setChecked(false); }
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
+            public void onCancelled(DatabaseError databaseError) { }
 
         });
 
@@ -143,9 +130,13 @@ public class ItemAdapter2 extends BaseAdapter {
                 if (SingletonPatternForItemsSaved.getInstance() != null) {
 
                     if (holder.spark_button.isChecked()) {
-                        addSavedItemBoutique(itemBoutique.getItemID());
+                        //add the item in the savedlist
+                        itemBoutique.addSavedItemBoutique();
+                        Toast.makeText(context, "item adicionado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
                     } else {
-                        deleteSavedItemBoutique(itemBoutique.getItemID());
+                        //delete the item from the savedlist
+                        itemBoutique.deleteSavedItemBoutique();
+                        Toast.makeText(context, "item deletado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -154,53 +145,20 @@ public class ItemAdapter2 extends BaseAdapter {
             @Override
             public void onEventAnimationEnd(ImageView button, boolean buttonState) { }
         });
-
-
-
         return rowView;
     }
 
-
-    public void deleteSavedItemBoutique(String ItemID) {
-
-        // delete itemID
-        refForSavedItems.child(ItemID).removeValue().
-                addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        //return true;
-                        Toast.makeText(context, "item deletado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //return false;
-                    }
-                });
-    }
-
-    public void addSavedItemBoutique(String ItemID) {
-        //save itemID
-        refForSavedItems.child(ItemID).setValue(ItemID);
-        Toast.makeText(context, "item adicionado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
-
-    }
 
     @Override
     public int getCount() {
         return listItems.size();
     }
-
     @Override
     public Object getItem(int position) {
         return listItems.get(position);
     }
-
     @Override
     public long getItemId(int position) {
         return position;
     }
-
-
 }

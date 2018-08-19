@@ -21,6 +21,7 @@ import com.example.mateusjose.newchatos.Objects.Contact;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
 import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
 import com.example.mateusjose.newchatos.Objects.Person;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,42 +44,26 @@ import java.util.List;
 
 public class ItemDetail extends AppCompatActivity {
 
-    public static final String ITEM_ID_STRING = "ITEM_ID";
-    public static final String ItemBoutique = "ItemBoutique";
-    public static final String itemID = "itemID";
-
-    ItemBoutique itemBoutique;
-
-    public String ITEM_ID;
-
-    final String users = "Users";
-    final String savedItems = "SavedItems";
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-    DatabaseReference refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
-
+    DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ProjStrings.SavedItems);
+    DatabaseReference refForItemBoutique = database.child(ProjStrings.ItemBoutique);
+    ItemBoutique itemBoutique;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
 
-
         itemBoutique = new ItemBoutique();
         Intent intent = getIntent();
         // get the item_id from the past activity
-        ITEM_ID = intent.getStringExtra(ITEM_ID_STRING);
-
-        itemBoutique.setItemID(intent.getStringExtra(itemID));
+        itemBoutique.setItemID(intent.getStringExtra(ProjStrings.itemID));
 
         // see if the item has an ID
         if (itemBoutique.getItemID()!=null) {
 
-            //set the data reference for the item boutique
-            DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-            DatabaseReference ref = database.child(ItemBoutique);
-
             //get the user data from the database
-            ref.child(itemBoutique.getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            refForItemBoutique.child(itemBoutique.getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     itemBoutique = new ItemBoutique();
@@ -89,9 +74,9 @@ public class ItemDetail extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             });
 
-        }//if it does not, closes the page. an big error has occured
+        }//if it does not, closes the page. an big error has occurred
         else{
-            Toast.makeText(this, "aconteceu um erro", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, ProjStrings.ErrorHappened, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -104,15 +89,16 @@ public class ItemDetail extends AppCompatActivity {
                     //see if the user is logged before saving the liked item
                     if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null){
                         if (spark_button.isChecked()) {
-                            addSavedItemBoutique(itemBoutique.getItemID());
+                            itemBoutique.addSavedItemBoutique();
+                            Toast.makeText(ItemDetail.this, ProjStrings.FavariteItemAdd, Toast.LENGTH_SHORT).show();
                         } else {
-                            deleteSavedItemBoutique(itemBoutique.getItemID());
+                            itemBoutique.deleteSavedItemBoutique();
+                            Toast.makeText(ItemDetail.this, ProjStrings.FavariteItemDelete, Toast.LENGTH_SHORT).show();
                         }
                     }// else, do nothing
                     else{
-                        Toast.makeText(ItemDetail.this, "faca o login pra poder salvar itens", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ItemDetail.this, ProjStrings.LoginToSavedItems, Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
             @Override
@@ -143,9 +129,8 @@ public class ItemDetail extends AppCompatActivity {
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
+                    //set the picture into the imageview
                     ImageView mainImage = (ImageView)findViewById(R.id.iv_main_image);
-
-                    //store the url for the picture
                     itemBoutique.setPhotoUrl(uri);
                     Glide.with(getBaseContext())
                             .load(itemBoutique.getPhotoUrl())
@@ -161,26 +146,19 @@ public class ItemDetail extends AppCompatActivity {
             });
         }
 
-
         // check if the item is on the saved items from the user, if the user is logged
         if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
             refForSavedItems.child(itemBoutique.getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.exists()) {
-                        spark_button.setChecked(true);
-                    }
-                    else{
-                        spark_button.setChecked(false);
-                    }
+                    if (dataSnapshot.exists()) { spark_button.setChecked(true); }
+                    else{ spark_button.setChecked(false); }
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                 }
             });
         }
-
     }
 
 
@@ -210,32 +188,4 @@ public class ItemDetail extends AppCompatActivity {
         });
 
     }
-
-
-    //delete the item from the firebase database
-    public void deleteSavedItemBoutique(String ItemID) {
-        // delete itemID
-        refForSavedItems.child(ItemID).removeValue().
-                addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        //return true;
-                        Toast.makeText(ItemDetail.this, "item deletado dos seus favoridos com sucesso", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //return false;
-                    }
-                });
-    }
-
-    // save the item into the firebase database
-    public void addSavedItemBoutique(String ItemID) {
-        //save itemID
-        refForSavedItems.child(ItemID).setValue(ItemID);
-        Toast.makeText(ItemDetail.this, "item adicionado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
-    }
-
 }

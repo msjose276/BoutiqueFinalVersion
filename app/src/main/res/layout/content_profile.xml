@@ -13,7 +13,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dimension_60"
         android:layout_marginBottom="@dimen/dimension_40"
 
         >
@@ -21,50 +20,70 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/dimension_20"
-            android:paddingRight="@dimen/dimension_20"
+            android:background="@color/white"
+            android:id="@+id/rl_bg_cover"
             >
             <de.hdodenhof.circleimageview.CircleImageView
                 app:civ_border_width="0dp"
                 android:id="@+id/ci_profile_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_margin="20dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/user_general_image"
                 android:onClick="EditPicture"
+                android:layout_marginTop="@dimen/dimension_100"
+                android:layout_marginBottom="@dimen/dimension_20"
                 />
 
-
-            <EditText
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pleopoliteno Gusmão"
-                android:id="@+id/tv_full_name"
                 android:layout_below="@+id/ci_profile_image"
-                android:layout_centerHorizontal="true"
-                android:textSize="@dimen/dimension_20"
-                />
+                android:background="@color/colorPrimary"
+                android:paddingLeft="@dimen/dimension_50"
+                >
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pleopoliteno Gusmão"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:id="@+id/tv_full_name"
+                    android:textSize="@dimen/dimension_20"
+                    />
 
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="812 929 2903"
-                android:id="@+id/tv_cellphone_number"
-                android:layout_below="@+id/tv_full_name"
-                android:layout_centerHorizontal="true"
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="812 929 2903"
+                    android:textColor="@color/gray_88"
+                    android:id="@+id/tv_cellphone_number"
+                    android:layout_below="@+id/tv_full_name"
 
-                />
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PleopolitenoGusmão@gmail.com"
-                android:id="@+id/tv_email"
-                android:layout_below="@+id/tv_cellphone_number"
-                android:layout_centerHorizontal="true"
+                    />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PleopolitenoGusmão@gmail.com"
+                    android:textColor="@color/gray_88"
+                    android:id="@+id/tv_email"
+                    android:layout_below="@+id/tv_cellphone_number"
+                    />
 
-                />
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Maianga, Luanda"
+                    android:textColor="@color/gray_88"
+                    android:id="@+id/tv_address"
+                    android:layout_below="@+id/tv_email"
+                    />
+
+            </RelativeLayout>
+
+
         </RelativeLayout>
 
     </ScrollView>

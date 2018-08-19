@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,14 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
 
-
     private FirebaseAuth mAuth;
-
-    public static final String USER_EMAIL = "USER_EMAIL";
-    public static final String USER_PASSWORD = "USER_PASSWORD";
-    public static final String loggedIn = "loggedIn";
-    public static final String USER_ID = "USER_ID";
-
     EditText etEmail;
     EditText etPassword;
 
@@ -40,30 +34,23 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView tvEnter = (TextView) findViewById(R.id.TV_enter);
-        TextView tvSignUp = (TextView) findViewById(R.id.TV_register);
         etEmail = (EditText) findViewById(R.id.ET_email);
         etPassword = (EditText) findViewById(R.id.ET_password);
 
-
-        Toast.makeText(this, "first activity = Login", Toast.LENGTH_SHORT).show();
         if (LoggedUserSingleton.getInstance().getBoutiqueUser() != null) {
             LoggedUserSingleton.getInstance();
-            //SingletonPatternForItemsSaved.getInstance();
             Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
             startActivity(intent);
             finish();
         }
     }
 
-
-
     public void enter(View view) {
          final String email = String.valueOf(etEmail.getText());
          final String password = String.valueOf(etPassword.getText());
 
         if(email.equals("")||password.equals("")){
-            Toast.makeText(this, "Email and password fields cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, ProjStrings.WrongEmailPassword, Toast.LENGTH_SHORT).show();
         }else {
 
             mAuth = ConfigurationFirebase.getFirebaseAuth();
@@ -71,16 +58,13 @@ public class Login extends AppCompatActivity {
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            Toast.makeText(Login.this, "passo 5555", Toast.LENGTH_SHORT).show();
 
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 LoggedUserSingleton.getInstance();
-                                //SingletonPatternForItemsSaved.getInstance();
                                 Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
                                 startActivity(intent);
                                 Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                //finish the intent and go back to navegation drawer
                                 finish();
 
                             } else {
@@ -89,22 +73,18 @@ public class Login extends AppCompatActivity {
                                 try {
                                     throw task.getException();
                                 } catch (FirebaseAuthInvalidCredentialsException e) {
-                                    exception = "palavra-passe errada";
+                                    exception = ProjStrings.WrongPassword;
                                 } catch (FirebaseAuthInvalidUserException e) {
-                                    exception ="conta com este email nao existe";
+                                    exception = ProjStrings.EmailDoesNotExist;
                                 } catch (Exception e) {
-                                    exception = "erro ao efetuar o login";
+                                    exception = ProjStrings.LoginError;
                                     e.printStackTrace();                                }
                                 Toast.makeText(Login.this, "erro : " + exception, Toast.LENGTH_SHORT).show();
-
                             }
-                            // ...
                         }
-
                     });
         }
     }
-
 
     public void register(View view) {
         Intent intent = new Intent(Login.this, SignUp.class);

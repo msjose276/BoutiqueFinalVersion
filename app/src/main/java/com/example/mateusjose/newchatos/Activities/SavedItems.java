@@ -21,6 +21,7 @@ import com.example.mateusjose.newchatos.Adaptor.AdaptorForSavedItem;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,15 +38,11 @@ import java.util.List;
 
 public class SavedItems extends AppCompatActivity {
 
-    final String users = "Users";
-    final String savedItems = "SavedItems";
-    final String itemBoutique = "ItemBoutique";
-
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-    DatabaseReference refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
-    DatabaseReference refForItemBoutique = database.child(itemBoutique);
+    DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ProjStrings.SavedItems);
+    DatabaseReference refForItemBoutique = database.child(ProjStrings.ItemBoutique);
 
-    List<ItemBoutique> listItemBoutques=new ArrayList<>();
+    List<ItemBoutique> listItemBoutques=new ArrayList<ItemBoutique>();
     List<String> listItemBoutquesID=new ArrayList<>();
 
     @Override
@@ -55,33 +52,33 @@ public class SavedItems extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         // check if the user is signed in. if it is not get out of this page
         if(FirebaseAuth.getInstance().getCurrentUser()==null){
             Toast.makeText(this, "precisa estar logado para ver os seus produtos favoritos", Toast.LENGTH_SHORT).show();
             finish();
         }
-        // get the list and set the adptor
 
-        //TODO: need to delete this later
-        /*listItemBoutques.add(new ItemBoutique());
-        listItemBoutques.add(new ItemBoutique());*/
+        //call and set the card adaptor
+        final AdaptorForSavedItem adaptor = new AdaptorForSavedItem(getBaseContext(),listItemBoutques);
 
-        listItemBoutques = new ArrayList<ItemBoutique>();
+        final ListView listView = (ListView)findViewById(R.id.lv_saved_items);
+        listView.setAdapter(adaptor);
+        //set onclick listner for the list of items
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //call the itemDetail activity for more detail about the item
+                Intent intent = new Intent(getBaseContext(), ItemDetail.class);
+                ItemBoutique newItemBoutique = (ItemBoutique)parent.getItemAtPosition(position);
+                intent.putExtra(ProjStrings.itemID,newItemBoutique.getItemID());
+                startActivity(intent);
+            }
+        });
+
 
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
 
-            // My top posts by number of stars
+            //populate the listview
             refForSavedItems.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,12 +95,11 @@ public class SavedItems extends AppCompatActivity {
                                 itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
                                 //add each item into the list
                                 listItemBoutques.add(itemBoutique);
+                                adaptor.notifyDataSetChanged();
 
                             }
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                            }
-
+                            public void onCancelled(DatabaseError databaseError) { }
                         });
                     }
                 }
@@ -112,28 +108,10 @@ public class SavedItems extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {
                     // Getting Post failed, log a message
                 }
-
             });
         }
 
-        //Mateus: call and set the card adaptor
-        AdaptorForSavedItem adaptor = new AdaptorForSavedItem(getBaseContext(),listItemBoutques);
 
-        final ListView listView = (ListView)findViewById(R.id.lv_saved_items);
-        listView.setAdapter(adaptor);
-
-        //mateus: set onclick listner for the list of items
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //call the itemDetail activity for more detail about the item
-                Intent intent = new Intent(getBaseContext(), ItemDetail.class);
-                ItemBoutique newItemBoutique = (ItemBoutique)parent.getItemAtPosition(position);
-                intent.putExtra("itemID",newItemBoutique.getItemID());
-
-                startActivity(intent);
-            }
-        });
     }
 
 }
