@@ -24,6 +24,8 @@ import com.example.mateusjose.newchatos.Activities.NavegationDrawerActivity;
 import com.example.mateusjose.newchatos.Adaptor.ItemAdaptor;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
+import com.example.mateusjose.newchatos.Objects.ItemFeatured;
+import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.Shoes;
 import com.example.mateusjose.newchatos.R;
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -57,19 +59,10 @@ public class FragmentTabHomem extends android.support.v4.app.Fragment{
     public static final String ITEM_ID_STRING = "ITEM_ID";
 
 
-    private String mUsername;
-    public static final String ANONYMOUS = "anonymous";
-    private ItemBoutique itemBoutique;
-    private ItemAdaptor itemAdaptor;
 
-
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mMessagesDatabaseReference;
-    private ChildEventListener mChildEventListener;
-    private FirebaseStorage mFirebaseStorage;
-    private StorageReference mChatPhotosStorageReference;
-
-    View intemView;
+    DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+    DatabaseReference refForItemBoutique = database.child(ProjStrings.ItemBoutique);
+    DatabaseReference refForFeatured = database.child("Featured");
 
     @Nullable
     @Override
@@ -78,89 +71,19 @@ public class FragmentTabHomem extends android.support.v4.app.Fragment{
         page.setBackgroundResource(R.color.white);
 
 
-        final GridView mListView = (GridView) page.findViewById(R.id.gvItem);
+        /*String itemID1=refForFeatured.child("Kids").push().getKey();
+        String itemID2=refForFeatured.child("Kids").push().getKey();
+        String itemID3=refForFeatured.child("Kids").push().getKey();
 
-        mDatabase= FirebaseDatabase.getInstance().getReference();
-        Query query = ConfigurationFirebase.getDatabaseReference().child("ItemBoutique").limitToLast(50);
-
-        FirebaseListOptions<ItemBoutique> options=new FirebaseListOptions.Builder<ItemBoutique>()
-//                .setLayout(R.layout.activity_main2)
-                .setLayout(R.layout.item_card)
-                .setQuery(query, ItemBoutique.class)
-                .setLifecycleOwner(this)
-                .build();
-
-        firebaseListAdapter = new FirebaseListAdapter<ItemBoutique>(options){
-
-            @Override
-            protected void populateView(View v, ItemBoutique model, int position) {
-
-                intemView = v;
-                ImageView ivItemImage= (ImageView) v.findViewById(R.id.iv_item_image);
-                TextView tvBrand= (TextView) v.findViewById(R.id.tv_brand);
-                TextView tvTitle= (TextView) v.findViewById(R.id.tv_title);
-                TextView tvPrice= (TextView) v.findViewById(R.id.tv_price);
-                itemBoutique = model;
-
-                // ******************** set title, price and brand. Also, decrease the number of characters if it is longer than 20
-                if(itemBoutique.getTitle().length()>20)
-                    tvBrand.setText(itemBoutique.getTitle().substring(0,10)+"...");
-                else
-                    tvBrand.setText(itemBoutique.getTitle());
-
-                if(Double.toString(itemBoutique.getPrice()).length()>20)
-                    tvPrice.setText(Double.toString(itemBoutique.getPrice()).substring(0,10)+"...");
-                else
-                    tvPrice.setText(Double.toString(itemBoutique.getPrice()));
-
-                if (Integer.toString(itemBoutique.getItemPosition()).length()>20)
-                    tvTitle.setText(Integer.toString(itemBoutique.getItemPosition()).substring(0,10)+"...");
-                else
-                    tvTitle.setText(Integer.toString(itemBoutique.getItemPosition()));
-
-                //********************* check if the item has some photo url associated with it
-                if(itemBoutique.getImagePath()!=null){
-
-                    StorageReference storageReference = ConfigurationFirebase.getStorageReference().child(itemBoutique.getImagePath());
-                    storageReference.getDownloadUrl().
-                            addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    //set the user profile image
-                                    ImageView ivItemImage= (ImageView) intemView.findViewById(R.id.iv_item_image);
-                                    TextView tvTitle= (TextView) intemView.findViewById(R.id.tv_title);
-                                    tvTitle.setText("entou aqui");
-                                    //boutiqueUser.setPhotoUrl(uri);
-                                    Glide.with(getContext())
-                                            .load(uri)
-                                            .into(ivItemImage);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            //do something
-                        }
-
-                    });
-                    /*if (itemBoutique.getItemPosition()==position) {
-                        Glide.with(getContext())
-                                .load(itemBoutique.getPhotoUrl())
-                                .into(ivItemImage);
-                    } else {
-                        Glide.with(getContext()).clear(ivItemImage);
-                        ivItemImage.setImageResource(R.drawable.bonita);
-                    }*/
-                }
-                else{
-                    ivItemImage.setImageResource(R.drawable.roupa1);
-                }
-
-            }
-        };
-
-        mListView.setAdapter(firebaseListAdapter);
-
-
+        ItemFeatured itemFeatured1 = new ItemFeatured("accessorios",123);
+        ItemFeatured itemFeatured2 = new ItemFeatured("calcados",343);
+        ItemFeatured itemFeatured3 = new ItemFeatured("blusas",982);
+        //refForFeatured.child("Woman");
+        refForFeatured.child("Kids").child(itemID1).setValue(itemFeatured1);
+        refForFeatured.child("Kids").child(itemID2).setValue(itemFeatured2);
+        refForFeatured.child("Kids").child(itemID3).setValue(itemFeatured3);
+*/
+        //refForSavedItems.child(this.itemID).setValue(this.itemID);
         return page;
     }
 }

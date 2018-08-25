@@ -147,6 +147,21 @@ public class PostItem extends AppCompatActivity {
         itemBoutique.setStokeSize(Integer.valueOf(etStokeSize.getText().toString()));
         itemBoutique.setGender(dropdownGender.getSelectedItem().toString());
         itemBoutique.setDescription(etDescription.getText().toString());
+
+        /*String itemID1=refForFeatured.child("Woman").push().getKey();
+        String itemID2=refForFeatured.child("Woman").push().getKey();
+        String itemID3=refForFeatured.child("Woman").push().getKey();
+
+        ItemFeatured itemFeatured1 = new ItemFeatured("accessorios",123);
+        ItemFeatured itemFeatured2 = new ItemFeatured("calcados",343);
+        ItemFeatured itemFeatured3 = new ItemFeatured("blusas",982);
+        //refForFeatured.child("Woman");
+        refForFeatured.child("Man").child(itemID1).setValue(itemFeatured1);
+        refForFeatured.child("Man").child(itemID2).setValue(itemFeatured2);
+        refForFeatured.child("Man").child(itemID3).setValue(itemFeatured3);*/
+
+        itemBoutique.addTag("accessorios");
+        itemBoutique.addTag("calcados");
         // stores the item in the database
         mDatabase.child("ItemBoutique").child(itemBoutique.getItemID()).setValue(itemBoutique);
         Toast.makeText(PostItem.this, "posted eee", Toast.LENGTH_SHORT).show();

@@ -96,6 +96,14 @@
         <activity
             android:name=".Activities.SearchItems"
             android:label="@string/title_activity_search_items"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.HomePageWoman"
+            android:label="@string/title_activity_home_page_woman"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.GeneralActivity"
+            android:label="@string/title_activity_general"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

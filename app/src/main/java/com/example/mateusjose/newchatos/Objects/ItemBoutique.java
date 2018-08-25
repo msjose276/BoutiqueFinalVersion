@@ -10,6 +10,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+
 public class ItemBoutique {
 
     private String Title;
@@ -29,6 +31,11 @@ public class ItemBoutique {
     private Uri photoUrl;
     private String imagePath;
     private int itemPosition;
+
+    private ArrayList<String> listOfTags;
+
+
+
 
     public ItemBoutique(){
     }
@@ -205,4 +212,28 @@ public class ItemBoutique {
     public void setBrand(String brand) {
         this.brand = brand;
     }
+
+    public ArrayList<String> getListOfTags() {
+        return listOfTags;
+    }
+
+    public void setListOfTags(ArrayList<String> listOfTags) {
+        this.listOfTags = listOfTags;
+    }
+
+    public void addTag(String tag) {
+        if(this.listOfTags==null)
+            this.listOfTags = new ArrayList<String>();
+        this.listOfTags.add(tag);
+    }
+
+    public boolean searchTag(String tag) {
+
+        if(this.listOfTags==null)
+            return false;
+        if(this.listOfTags.contains(tag))
+            return true;
+        return false;
+    }
+
 }

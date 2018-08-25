@@ -5,6 +5,22 @@
 
     >
 
+
+    <item android:title="Distaques">
+        <menu>
+            <item
+                android:id="@+id/nav_woman"
+                android:title="Mulheres"
+                />
+            <item
+                android:id="@+id/nav_man"
+                android:title="Homens" />
+            <item
+                android:id="@+id/nav_kids"
+                android:title="Criancas" />
+        </menu>
+    </item>
+
     <group android:checkableBehavior="single"
         >
         <item
@@ -22,6 +38,7 @@
             android:title="Acerca do applicativo"
             />
     </group>
+
 
 
 </menu>

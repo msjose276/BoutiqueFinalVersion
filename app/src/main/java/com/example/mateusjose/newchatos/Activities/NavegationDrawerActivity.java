@@ -225,12 +225,31 @@ public class NavegationDrawerActivity extends AppCompatActivity
             Intent main = new Intent(getBaseContext(), SavedItems.class);
             startActivity(main);
         } else if (id == R.id.nav_settings) {
-            Intent main = new Intent(getBaseContext(), NavStores.class);
+            Intent main = new Intent(getBaseContext(), HomePageWoman.class);
             startActivity(main);
         } else if (id == R.id.nav_about_the_application) {
             Intent main = new Intent(getBaseContext(), AboutTheApplication.class);
             startActivity(main);
         }
+        else if (id == R.id.nav_woman) {
+            Intent main = new Intent(getBaseContext(), HomePageWoman.class);
+            main.putExtra("ItemBoutiqueTag","Woman");
+            startActivity(main);
+        } else if (id == R.id.nav_man) {
+            Intent main = new Intent(getBaseContext(), HomePageWoman.class);
+            main.putExtra("ItemBoutiqueTag","Man");
+
+            startActivity(main);
+        } else if (id == R.id.nav_kids) {
+            Intent main = new Intent(getBaseContext(), HomePageWoman.class);
+            main.putExtra("ItemBoutiqueTag","Kids");
+            startActivity(main);
+        }
+
+
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
