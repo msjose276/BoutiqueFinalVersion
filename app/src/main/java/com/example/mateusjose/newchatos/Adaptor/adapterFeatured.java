@@ -1,6 +1,9 @@
 package com.example.mateusjose.newchatos.Adaptor;
 
+import android.content.ClipData;
 import android.content.Context;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +21,14 @@ import com.example.mateusjose.newchatos.Objects.ItemFeatured;
 import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
@@ -34,8 +40,6 @@ public class adapterFeatured extends BaseAdapter {
     Context context;
     private ArrayList<ItemFeatured> listItems;
 
-    DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-    DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ProjStrings.SavedItems);
 
     static class ViewHolder{
         TextView tvQuantity;
@@ -80,21 +84,14 @@ public class adapterFeatured extends BaseAdapter {
 
         if (Integer.toString(listItems.get(position).getQuantity())!=null)
             holder.tvQuantity.setText(Integer.toString(listItems.get(position).getQuantity())+" itens");
-        // set the background of the adapter
-        holder.ivBackground.setBackgroundResource(R.drawable.man_bg);
 
         //********************* check if the item has some photo url associated with it
-        /*if(listItems.get(position).getPhotoUrl()!=null){
-            Log.e("imageUrl",listItems.get(position).getPhotoUrl().toString());
+        if(listItems.get(position).getPhotoUrl()!=null){
+
             Glide.with(rowView.getContext())
                     .load(listItems.get(position).getPhotoUrl())
-                    .into(holder.ivItemImage);
+                    .into(holder.ivBackground);
         }
-        else{
-            holder.ivItemImage.setImageResource(R.drawable.roupa1);
-        }*/
-
-
         return rowView;
     }
 

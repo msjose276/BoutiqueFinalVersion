@@ -5,10 +5,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
 
 public class BoutiqueUser {
 
@@ -26,6 +29,9 @@ public class BoutiqueUser {
     private String creationDate;
     private String password;
     private String imagePath;
+    private boolean company;
+
+    private ArrayList<String> SavedItems;
 
     // path for the users in the firebase
     public static final String users = "Users";
@@ -36,7 +42,7 @@ public class BoutiqueUser {
     public void saveBoutiqueUserOnFirebaseDatabase(){
 
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
-        databaseReference.child(users).child(getUserID()).child(personalInfo).setValue(this);
+        databaseReference.child(users).child(getUserID()).setValue(this);
     }
 
     //TODO: the return value for this method needs to be changed. it has to return a boolean value to indicate whether the operation was successful of not
@@ -159,5 +165,54 @@ public class BoutiqueUser {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public ArrayList<String> getSavedItems() {
+        return SavedItems;
+    }
+
+    //TODO: need to test saved items for the whole project
+    public void setSavedItems(ArrayList<String> savedItems) {
+        SavedItems = savedItems;
+    }
+
+    public ArrayList<String> getSavedItems(ArrayList<String> savedItems) {
+        return SavedItems;
+    }
+
+    public boolean isItemSaved(String itemID) {
+        if(SavedItems==null)
+            return false;
+        if(SavedItems.contains(itemID))
+            return true;
+        return false;
+    }
+
+    public void addSavedItem(String savedItemID) {
+        if(SavedItems==null)
+            SavedItems = new ArrayList<String>();
+        //need to add items according to their date
+        SavedItems.add(savedItemID);
+        DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+        DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        refForSavedItems.setValue(this);
+    }
+
+    public void deleteSavedItem(String savedItemID) {
+        if(SavedItems==null)
+            return;
+        if(SavedItems.remove(savedItemID)){
+            DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
+            DatabaseReference refForSavedItems = database.child(ProjStrings.Users).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            refForSavedItems.setValue(this);
+        }
+    }
+
+    public boolean isCompany() {
+        return company;
+    }
+
+    public void setCompany(boolean company) {
+        this.company = company;
     }
 }

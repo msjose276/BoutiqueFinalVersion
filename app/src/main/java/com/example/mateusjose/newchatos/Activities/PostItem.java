@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -107,16 +108,15 @@ public class PostItem extends AppCompatActivity {
         }
         else{
 
-            //***********************
-            //mAuth = FirebaseAuth.getInstance();
-            //mDatabase= FirebaseDatabase.getInstance().getReference();
-
             mAuth = ConfigurationFirebase.getFirebaseAuth();
             mDatabase= ConfigurationFirebase.getDatabaseReference();
 
             itemBoutique= new ItemBoutique();
             String itemID=mDatabase.child("ItemBoutique").push().getKey();
             itemBoutique.setItemID(itemID);
+            //set the date and the poster ID
+            itemBoutique.setDate(new Date());
+            itemBoutique.setPosterID(FirebaseAuth.getInstance().getCurrentUser().getUid());
             //upload image to the server before storing the refence of the image in the itemBoutique
             StorageReference photoRef = mStorageRef.child(itemBoutique.getItemID()).child(pickedUri.getLastPathSegment()+".jpg");
             photoRef.putFile(pickedUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -124,7 +124,9 @@ public class PostItem extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
                     itemBoutique.setImagePath(taskSnapshot.getMetadata().getPath());
-                    //taskSnapshot.getUploadSessionUri().get
+                    itemBoutique.addImagePath(taskSnapshot.getMetadata().getPath());
+                    itemBoutique.addImagePath(taskSnapshot.getMetadata().getPath());
+                    itemBoutique.addImagePath(taskSnapshot.getMetadata().getPath());
                     sendBoutiqueItemToDatabase();
 
                 }

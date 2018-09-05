@@ -28,6 +28,10 @@
             android:title="Boutiques"
             />
         <item
+            android:id="@+id/nav_post_items"
+            android:title="postar items"
+            />
+        <item
             android:id="@+id/nav_favorites"
             android:title="Favaritos" />
         <item

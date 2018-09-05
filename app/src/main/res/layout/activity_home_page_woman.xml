@@ -16,21 +16,62 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="exitUntilCollapsed|scroll"
             app:contentScrim="@color/colorPrimary"
-            app:title="woman"
             app:expandedTitleMarginStart="@dimen/dimension_30"
             app:expandedTitleMarginEnd="@dimen/dimension_30"
             android:background="@drawable/woman_bg"
-            >
+            android:id="@+id/collapsingToolbarLayout"
 
+            >
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimension_50"
                 android:id="@+id/tb_page_woman"
                 app:popupTheme="@style/Theme.AppCompat.Light"
                 app:layout_collapseMode="pin"
+
+                >
+            </android.support.v7.widget.Toolbar>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
                 >
 
-            </android.support.v7.widget.Toolbar>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="@dimen/dimension_80"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/colorPrimary"
+                    android:layout_marginBottom="@dimen/dimension_20"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimension_30"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/dimension_70"
+                    android:layout_marginLeft="@dimen/dimension_30"
+
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="vestidos, sapatos, bolsas"
+                    android:textColor="@color/white"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/dimension_60"
+                    android:layout_marginLeft="@dimen/dimension_30"
+
+                    />
+
+
+            </RelativeLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

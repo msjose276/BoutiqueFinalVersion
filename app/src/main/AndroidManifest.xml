@@ -100,11 +100,34 @@
         <activity
             android:name=".Activities.HomePageWoman"
             android:label="@string/title_activity_home_page_woman"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".Activities.NavegationDrawerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mateusjose.newchatos.Activities.NavegationDrawerActivity" />
+        </activity>
         <activity
             android:name=".Activities.GeneralActivity"
             android:label="@string/title_activity_general"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.Boutiques"
+            android:label="@string/title_activity_boutiques"
+            android:parentActivityName=".Activities.NavegationDrawerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mateusjose.newchatos.Activities.NavegationDrawerActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.BoutiqueDetail"
+            android:label="@string/title_activity_boutique_detail"
+            android:parentActivityName=".Activities.NavegationDrawerActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mateusjose.newchatos.Activities.NavegationDrawerActivity" />
+        </activity>
     </application>
 
 </manifest>

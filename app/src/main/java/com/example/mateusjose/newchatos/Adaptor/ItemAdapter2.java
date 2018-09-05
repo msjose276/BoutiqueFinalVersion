@@ -14,9 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.mateusjose.newchatos.Activities.ItemDetail;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
+import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
 import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
@@ -31,7 +33,9 @@ import com.google.firebase.storage.StorageReference;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ItemAdapter2 extends BaseAdapter {
@@ -83,20 +87,26 @@ public class ItemAdapter2 extends BaseAdapter {
             holder = (ViewHolder)rowView.getTag();
         }
 
+        //set title
         if(listItems.get(position).getTitle().length()>20)
             holder.tvBrand.setText(listItems.get(position).getTitle().substring(0,10)+"...");
         else
             holder.tvBrand.setText(listItems.get(position).getTitle());
 
+        //set price
         if(Double.toString(listItems.get(position).getPrice()).length()>20)
             holder.tvPrice.setText(Double.toString(listItems.get(position).getPrice()).substring(0,10)+"...");
         else
             holder.tvPrice.setText(Double.toString(listItems.get(position).getPrice()));
 
-        if (Integer.toString(listItems.get(position).getItemPosition()).length()>20)
-            holder.tvTitle.setText(Integer.toString(listItems.get(position).getItemPosition()).substring(0,10)+"...");
-        else
-            holder.tvTitle.setText(Integer.toString(listItems.get(position).getItemPosition()));
+        //set something
+        if (listItems.get(position).getDate()!=null){
+            SimpleDateFormat ft = new SimpleDateFormat ("dd.MM.yyyy");
+            holder.tvTitle.setText(ft.format(listItems.get(position).getDate()).toString());
+        }
+        else {
+            holder.tvTitle.setText("...");
+        }
 
         //********************* check if the item has some photo url associated with it
         if(listItems.get(position).getPhotoUrl()!=null){
@@ -108,35 +118,26 @@ public class ItemAdapter2 extends BaseAdapter {
         else{
             holder.ivItemImage.setImageResource(R.drawable.roupa1);
         }
-
-
-        // check if the item is in the saved item
-        refForSavedItems.child(listItems.get(position).getItemID()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) { holder.spark_button.setChecked(true); }
-                else{ holder.spark_button.setChecked(false); }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) { }
-
-        });
+        // set the liked button state
+        if(LoggedUserSingleton.getInstance().getBoutiqueUser().isItemSaved(listItems.get(position).getItemID())){
+            holder.spark_button.setChecked(true);            }
+        else{
+            holder.spark_button.setChecked(false);
+        }
 
         final ItemBoutique itemBoutique= listItems.get(position);
-
+        // set the button event listener
         holder.spark_button.setEventListener(new SparkEventListener() {
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
                 if (SingletonPatternForItemsSaved.getInstance() != null) {
 
                     if (holder.spark_button.isChecked()) {
-                        //add the item in the savedlist
-                        itemBoutique.addSavedItemBoutique();
-                        Toast.makeText(context, "item adicionado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
+                        LoggedUserSingleton.getInstance().getBoutiqueUser().addSavedItem(itemBoutique.getItemID());
+                        Toast.makeText(context, ProjStrings.FavariteItemAdd, Toast.LENGTH_SHORT).show();
                     } else {
-                        //delete the item from the savedlist
-                        itemBoutique.deleteSavedItemBoutique();
-                        Toast.makeText(context, "item deletado dos seus favoridos com sucesso ", Toast.LENGTH_SHORT).show();
+                        LoggedUserSingleton.getInstance().getBoutiqueUser().deleteSavedItem(itemBoutique.getItemID());
+                        Toast.makeText(context, ProjStrings.FavariteItemDelete, Toast.LENGTH_SHORT).show();
                     }
                 }
             }

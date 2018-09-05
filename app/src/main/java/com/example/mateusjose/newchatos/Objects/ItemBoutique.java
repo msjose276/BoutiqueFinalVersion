@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ItemBoutique {
 
@@ -34,6 +35,11 @@ public class ItemBoutique {
 
     private ArrayList<String> listOfTags;
 
+    private ArrayList<String> listOfImagePath;
+    private ArrayList<Uri> listOfPhotoUrl;
+
+
+    private Date date;
 
 
 
@@ -236,4 +242,46 @@ public class ItemBoutique {
         return false;
     }
 
+
+    public ArrayList<String> getListOfImagePath() {
+        if(listOfImagePath==null)
+            return null;
+        return listOfImagePath;
+    }
+
+    public void setListOfImagePath(ArrayList<String> listOfImagePath) {
+        this.listOfImagePath = listOfImagePath;
+    }
+
+    public void addImagePath(String imagePath) {
+        if(this.listOfImagePath==null)
+            this.listOfImagePath = new ArrayList<String>();
+        this.listOfImagePath.add(imagePath);
+    }
+
+    public ArrayList<Uri> getListOfPhotoUrl() {
+        if(listOfPhotoUrl==null)
+            return listOfPhotoUrl;
+        return listOfPhotoUrl;
+    }
+
+    public void setListOfPhotoUrl(ArrayList<Uri> listOfPhotoUrl) {
+        this.listOfPhotoUrl = listOfPhotoUrl;
+    }
+
+    public void addListOfPhotoUrl(Uri photoUrl) {
+        if(this.listOfPhotoUrl==null)
+            this.listOfPhotoUrl = new ArrayList<Uri>();
+        this.listOfPhotoUrl.add(photoUrl);
+    }
+
+    public Date getDate() {
+        if(date==null)
+            return null;
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }

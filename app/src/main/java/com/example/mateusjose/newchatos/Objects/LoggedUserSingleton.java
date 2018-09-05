@@ -22,8 +22,7 @@ public class LoggedUserSingleton {
 
     // path for the users in the firebase
     public static final String users = "Users";
-    public static final String savedItems = "SavedItems";
-    public static final String personalInfo = "PersonalInfo";
+
 
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
     DatabaseReference refForPersonalInfo ;
@@ -32,8 +31,8 @@ public class LoggedUserSingleton {
     private LoggedUserSingleton(){
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
 
-            refForPersonalInfo = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(personalInfo);
-            refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
+            refForPersonalInfo = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            //refForSavedItems = database.child(users).child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(savedItems);
 
             //get the user data from the database
             refForPersonalInfo.addListenerForSingleValueEvent(new ValueEventListener() {

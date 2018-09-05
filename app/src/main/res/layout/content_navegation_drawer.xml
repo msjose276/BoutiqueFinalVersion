@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,11 +9,14 @@
     tools:showIn="@layout/app_bar_navegation_drawer"
     android:background="@color/white"
     >
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container"
+    <GridView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-</android.support.constraint.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:numColumns="2"
+        android:id="@+id/gvItem"
+        android:layout_below="@+id/lv_main"
+        android:background="@color/white"
+        android:layout_gravity="top"
+        >
+    </GridView>
+</RelativeLayout>

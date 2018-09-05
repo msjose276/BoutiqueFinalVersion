@@ -91,6 +91,7 @@ public class SignUp extends AppCompatActivity {
                                 // get the user created, store its uid and save the the boutique user into the firebase
                                 FirebaseUser user = task.getResult().getUser();
                                 boutiqueUser.setUserID(user.getUid());
+                                boutiqueUser.setCompany(true);
                                 boutiqueUser.saveBoutiqueUserOnFirebaseDatabase();
 
                                 LoggedUserSingleton.getInstance();

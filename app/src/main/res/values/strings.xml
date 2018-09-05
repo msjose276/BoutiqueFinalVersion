@@ -35,6 +35,8 @@
     <string name="title_activity_search_items">SearchItems</string>
     <string name="title_activity_home_page_woman">HomePageWoman</string>
     <string name="title_activity_general">GeneralActivity</string>
+    <string name="title_activity_boutiques">Boutiques</string>
+    <string name="title_activity_boutique_detail">BoutiqueDetail</string>
 
 
 </resources>

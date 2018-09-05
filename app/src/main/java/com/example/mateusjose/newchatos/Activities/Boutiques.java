@@ -9,15 +9,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.SearchView;
+import android.widget.ListView;
 
 import com.example.mateusjose.newchatos.Adaptor.ItemAdapter2;
+import com.example.mateusjose.newchatos.Adaptor.adapterBoutiques;
+import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
 import com.example.mateusjose.newchatos.Objects.ProjStrings;
@@ -33,40 +32,27 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneralActivity extends AppCompatActivity {
-    public ItemAdapter2 itemAdaptor ;
-    public ItemBoutique itemBoutique;
+public class Boutiques extends AppCompatActivity {
+
+
+    public adapterBoutiques itemAdaptor ;
 
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
-    DatabaseReference refForItemBoutique = database.child(ProjStrings.ItemBoutique);
+    DatabaseReference refForItemBoutique = database.child(ProjStrings.Users);
     private ChildEventListener mChildEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_general);
+        setContentView(R.layout.activity_boutiques);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
-        //toolbar.set
-        Intent intent = getIntent();
-        // get the item_id from the past activity
-        final String itemBoutiqueTag = intent.getStringExtra("ItemBoutiqueTag");
-
 
         List<ItemAdapter2> listOfItemAdaptor = new ArrayList<>();
-        final GridView gvView = (GridView) findViewById(R.id.gvItem);
+        final ListView gvView = (ListView) findViewById(R.id.lv_list_of_items);
 
-        itemAdaptor = new ItemAdapter2(getBaseContext());
+        itemAdaptor = new adapterBoutiques(getBaseContext());
         gvView.setAdapter(itemAdaptor);
 
         // create a new event listener
@@ -74,15 +60,16 @@ public class GeneralActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 //create a new item and store the data on it
-                final ItemBoutique itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
-                if(itemBoutique.getImagePath()!=null){
+                final BoutiqueUser boutiqueUser = dataSnapshot.getValue(BoutiqueUser.class);
+
+                if(boutiqueUser.getImagePath()!=null){
                     //get the reference for the storage
-                    StorageReference storageReference = ConfigurationFirebase.getFirebaseStorage().getReference().child(itemBoutique.getImagePath());
+                    StorageReference storageReference = ConfigurationFirebase.getFirebaseStorage().getReference().child(boutiqueUser.getImagePath());
                     storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             //store the url for the picture
-                            itemBoutique.setPhotoUrl(uri);
+                            boutiqueUser.setPhotoUrl(uri);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -91,10 +78,7 @@ public class GeneralActivity extends AppCompatActivity {
                         }
                     });
                 }
-                //filter the items before adding to the list of adapter
-                if(itemBoutique.searchTag(itemBoutiqueTag)){
-                    itemAdaptor.addItem(itemBoutique);
-                }
+                itemAdaptor.addItem(boutiqueUser);
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
@@ -105,53 +89,22 @@ public class GeneralActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        // attach the event listener to the database reference
-        refForItemBoutique.addChildEventListener(mChildEventListener);
+        // attach the event listener to the database reference for every user that is company
+        refForItemBoutique.orderByChild("company").equalTo(true).addChildEventListener(mChildEventListener);
 
         //set onclick listener for the list of items
         gvView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //call the itemDetail activity for more detail about the item
-                Intent intent = new Intent(getBaseContext(), ItemDetail.class);
-                ItemBoutique newItemBoutique = (ItemBoutique)parent.getItemAtPosition(position);
-                intent.putExtra(ProjStrings.itemID,newItemBoutique.getItemID());
+                Intent intent = new Intent(getBaseContext(), BoutiqueDetail.class);
+                BoutiqueUser boutiqueUser = (BoutiqueUser)parent.getItemAtPosition(position);
+                intent.putExtra(ProjStrings.itemID,boutiqueUser.getUserID());
                 startActivity(intent);
             }
         });
 
         itemAdaptor.notifyDataSetChanged();
     }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.navegation_drawer, menu);
-
-        // code to open the search activity
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_search, menu);
-        MenuItem item = menu.findItem(R.id.menu_search);
-        SearchView searchView = (SearchView)item.getActionView();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Intent main = new Intent(getBaseContext(), SearchItems.class);
-                startActivity(main);
-                return false;
-            }
-        });
-
-        return true;
-    }
-
 
 }

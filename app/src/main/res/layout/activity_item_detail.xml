@@ -11,6 +11,8 @@
     android:layout_margin="15dp"
 
     >
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="350dp"
@@ -84,6 +86,18 @@
                 app:sparkbutton_iconSize="25dp"
                 app:sparkbutton_primaryColor="@color/colorPrimary"
                 app:sparkbutton_secondaryColor="@color/neutral_blue"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/dimension_10"
+                />
+            <de.hdodenhof.circleimageview.CircleImageView
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/white"
+                android:id="@+id/ci_boutique_poster"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/user_general_image"
+                android:onClick="BoutiquePoster"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/dimension_10"
                 />

@@ -21,6 +21,7 @@ import com.example.mateusjose.newchatos.Adaptor.AdaptorForSavedItem;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
 import com.example.mateusjose.newchatos.Objects.ItemBoutique;
+import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
 import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
 import com.example.mateusjose.newchatos.R;
@@ -52,12 +53,22 @@ public class SavedItems extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         // check if the user is signed in. if it is not get out of this page
         if(FirebaseAuth.getInstance().getCurrentUser()==null){
             Toast.makeText(this, "precisa estar logado para ver os seus produtos favoritos", Toast.LENGTH_SHORT).show();
             finish();
         }
-
         //call and set the card adaptor
         final AdaptorForSavedItem adaptor = new AdaptorForSavedItem(getBaseContext(),listItemBoutques);
 
@@ -76,39 +87,22 @@ public class SavedItems extends AppCompatActivity {
         });
 
 
+        //TODO: it gets null pointer when the list is null and the program craches
         if(FirebaseAuth.getInstance().getCurrentUser()!=null) {
-
-            //populate the listview
-            refForSavedItems.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                        // get every itemID from the saved items
-                        listItemBoutquesID.add(postSnapshot.getValue(String.class));
-                        Log.e("list of saved ",postSnapshot.getValue(String.class));
-                        // set the reference for each item and get the itemBoutique
-                        refForItemBoutique.child(postSnapshot.getValue(String.class)).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                //save the data
-                                ItemBoutique itemBoutique = new ItemBoutique();
-                                itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
-                                //add each item into the list
-                                listItemBoutques.add(itemBoutique);
-                                adaptor.notifyDataSetChanged();
-
-                            }
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) { }
-                        });
+            for (int index = 0; index < LoggedUserSingleton.getInstance().getBoutiqueUser().getSavedItems().size(); index++) {
+                refForItemBoutique.child(LoggedUserSingleton.getInstance().getBoutiqueUser().getSavedItems().get(index)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //save the data
+                        ItemBoutique itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
+                        //add each item into the list
+                        listItemBoutques.add(itemBoutique);
+                        adaptor.notifyDataSetChanged();
                     }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Getting Post failed, log a message
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) { }
+                });
+            }
         }
 
 

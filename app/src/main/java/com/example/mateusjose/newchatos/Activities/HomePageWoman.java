@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.mateusjose.newchatos.Adaptor.ItemAdapter2;
 import com.example.mateusjose.newchatos.Adaptor.adapterFeatured;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
@@ -47,14 +49,23 @@ public class HomePageWoman extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page_woman);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tb_page_woman);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
+        collapsingToolbarLayout.setTitle("Mulheres");
 
-        Intent intent = getIntent();
+
         // get the item_id from the past activity
+        Intent intent = getIntent();
         final String itemBoutiqueTag = intent.getStringExtra("ItemBoutiqueTag");
-
         if(itemBoutiqueTag==null){
             //close the activity because it came with an error. error: did not have an ItemBoutiqueTag
             Toast.makeText(this, "aconteceu algum erro", Toast.LENGTH_SHORT).show();
@@ -62,7 +73,6 @@ public class HomePageWoman extends AppCompatActivity {
         }
 
         //
-        List<adapterFeatured> listOfItemAdaptor = new ArrayList<>();
         ListView gvView = (ListView) findViewById(R.id.lv_items);
 
         itemAdaptor = new adapterFeatured(getBaseContext());
@@ -74,8 +84,22 @@ public class HomePageWoman extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 //create a new item and store the data on it
                 final ItemFeatured itemFeatured = dataSnapshot.getValue(ItemFeatured.class);
+                StorageReference storageReference = ConfigurationFirebase.getFirebaseStorage().getReference().child(itemFeatured.getImagePath());
+                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        //store the url for the picture
+                        itemFeatured.setPhotoUrl(uri);
+                        itemAdaptor.addItem(itemFeatured);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        //do something
+                    }
+                });
 
-                itemAdaptor.addItem(itemFeatured);
+
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }

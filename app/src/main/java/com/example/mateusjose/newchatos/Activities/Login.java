@@ -43,6 +43,20 @@ public class Login extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        /*mAuth = ConfigurationFirebase.getFirebaseAuth();
+        mAuth.signInWithEmailAndPassword("clelia@gmail.com", "qwertyuiop")
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            LoggedUserSingleton.getInstance();
+                            Intent intent = new Intent(Login.this, NavegationDrawerActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });*/
     }
 
     public void enter(View view) {

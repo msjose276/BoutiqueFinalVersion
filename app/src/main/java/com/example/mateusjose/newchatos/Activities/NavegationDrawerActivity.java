@@ -5,12 +5,15 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,18 +23,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.mateusjose.newchatos.Adaptor.ItemAdapter2;
 import com.example.mateusjose.newchatos.Nav_activities.NavFavorites;
 import com.example.mateusjose.newchatos.Nav_activities.NavDefinitionsActivity;
 import com.example.mateusjose.newchatos.Nav_activities.NavPaymentInformation;
 import com.example.mateusjose.newchatos.Nav_activities.NavStores;
 import com.example.mateusjose.newchatos.Objects.BoutiqueUser;
 import com.example.mateusjose.newchatos.Objects.ConfigurationFirebase;
+import com.example.mateusjose.newchatos.Objects.ItemBoutique;
 import com.example.mateusjose.newchatos.Objects.LoggedUserSingleton;
 import com.example.mateusjose.newchatos.Objects.ProjStrings;
 import com.example.mateusjose.newchatos.Objects.SingletonPatternForItemsSaved;
@@ -47,6 +55,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +63,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -77,6 +87,12 @@ public class NavegationDrawerActivity extends AppCompatActivity
     DatabaseReference database = ConfigurationFirebase.getDatabaseReference();
     DatabaseReference refForItemBoutique = database.child(ProjStrings.ItemBoutique);
 
+    public ItemAdapter2 itemAdaptor ;
+    //public ItemBoutique itemBoutique;
+
+
+    private ChildEventListener mChildEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +100,9 @@ public class NavegationDrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        this.setTitle("Boutiques");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -91,40 +110,72 @@ public class NavegationDrawerActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //navigationView.setBackgroundColor(getResources().getColor(R.color.blue1));
         //setNavigationDrawerHeader( navigationView);
         LoggedUserSingleton.getInstance();
-        SingletonPatternForItemsSaved.getInstance();
-        //**************** for sliding menu
 
-        TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
-        ViewPager viewPager=(ViewPager)findViewById(R.id.container);
-        TabsPager tabsPager=new TabsPager(getSupportFragmentManager());
+        final GridView gvView = (GridView)findViewById(R.id.gvItem);
 
-        viewPager.setAdapter(tabsPager);
-        tabLayout.setupWithViewPager(viewPager);
+        itemAdaptor = new ItemAdapter2(getBaseContext());
+        gvView.setAdapter(itemAdaptor);
 
-        //call the search bar funtion
-        SearchBar();
-    }
-
-    public void SearchBar(){
-        EditText searchBar = (EditText) findViewById(R.id.et_search_bar);
-        searchBar.addTextChangedListener(new TextWatcher() {
+        // create a new event listener
+        mChildEventListener = new ChildEventListener() {
             @Override
-            public void afterTextChanged(Editable s) {}
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() != 0){
-                    // call a new activity
-                    Intent main = new Intent(getBaseContext(), SearchItems.class);
-                    startActivity(main);
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                //create a new item and store the data on it
+                final ItemBoutique itemBoutique = dataSnapshot.getValue(ItemBoutique.class);
+                if(itemBoutique.getImagePath()!=null){
+                    //get the reference for the storage
+                    StorageReference storageReference = ConfigurationFirebase.getFirebaseStorage().getReference().child(itemBoutique.getImagePath());
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            //store the url for the picture
+                            itemBoutique.setPhotoUrl(uri);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            //do something
+                        }
+                    });
                 }
+                itemAdaptor.addItem(itemBoutique);
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        };
+        // attach the event listener to the database reference
+        refForItemBoutique.addChildEventListener(mChildEventListener);
+
+        //set onclick listener for the list of items
+        gvView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //call the itemDetail activity for more detail about the item
+                Intent intent = new Intent(getBaseContext(), ItemDetail.class);
+                ItemBoutique newItemBoutique = (ItemBoutique)parent.getItemAtPosition(position);
+                intent.putExtra(ProjStrings.itemID,newItemBoutique.getItemID());
+
+                startActivity(intent);
             }
         });
+
+        itemAdaptor.notifyDataSetChanged();
+
+
     }
 
 
@@ -179,7 +230,27 @@ public class NavegationDrawerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navegation_drawer, menu);
+        //getMenuInflater().inflate(R.menu.navegation_drawer, menu);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search, menu);
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView)item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Intent main = new Intent(getBaseContext(), SearchItems.class);
+                startActivity(main);
+                return false;
+            }
+        });
+
         return true;
     }
 
@@ -219,14 +290,30 @@ public class NavegationDrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_boutiques) {
+            Intent main = new Intent(getBaseContext(), Boutiques.class);
+            startActivity(main);
+        }
+        else if(id == R.id.nav_post_items){
             Intent main = new Intent(getBaseContext(), PostItem.class);
             startActivity(main);
-        } else if (id == R.id.nav_favorites) {
+        }
+        else if (id == R.id.nav_favorites) {
             Intent main = new Intent(getBaseContext(), SavedItems.class);
             startActivity(main);
         } else if (id == R.id.nav_settings) {
-            Intent main = new Intent(getBaseContext(), HomePageWoman.class);
-            startActivity(main);
+
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                // sign out and delete the user information
+                FirebaseAuth.getInstance().signOut();
+                LoggedUserSingleton.getInstance().setBoutiqueUser(null);
+            } else {
+                // No user is signed in, then it has to log in
+                Intent main = new Intent(getBaseContext(), Login.class);
+                startActivity(main);
+                finish();
+            }
+
+
         } else if (id == R.id.nav_about_the_application) {
             Intent main = new Intent(getBaseContext(), AboutTheApplication.class);
             startActivity(main);
